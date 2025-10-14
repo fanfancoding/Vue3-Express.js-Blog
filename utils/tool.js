@@ -17,3 +17,8 @@ export function parseToken(token) {
     return null;
   }
 }
+
+// 处理数组类型相应数据
+export function handleArrayResponseData(data) {
+  return data.map((item) => item.dataValues);
+}
