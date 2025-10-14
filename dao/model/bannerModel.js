@@ -1,19 +1,23 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../dbConnect.js";
 
-// 定义管理员模型
-export const AdminModal = sequelize.define(
-  "Admin",
+// 定义轮播图模型
+export const bannerModel = sequelize.define(
+  "Banner",
   {
-    name: {
+    midImg: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    loginId: {
+    bigImg: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    loginPwd: {
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    descrption: {
       type: DataTypes.STRING,
       allowNull: false,
     },

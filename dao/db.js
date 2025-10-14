@@ -1,7 +1,9 @@
 // 该文件负责对数据库进行初始化操作
 import { sequelize } from "./dbConnect.js";
-import { AdminModal } from "./model/adminModal.js";
-import { BannerModal } from "./model/bannerModal.js";
+import { adminModel } from "./model/adminModel.js";
+import { bannerModel } from "./model/bannerModel.js";
+import { BlogTypeModel } from "./model/BlogTypeModel.js";
+
 import md5 from "md5";
 
 // 初始化数据库
@@ -10,16 +12,18 @@ export async function initDb() {
     // 同步数据库模型
     await sequelize.sync({ alert: true });
     console.log("sql init success");
-    (await AdminModal.count())
+    // 初始化管理员账号
+    (await adminModel.count())
       ? () => {}
-      : await AdminModal.create({
+      : await adminModel.create({
           name: "admin",
           loginId: "admin",
           loginPwd: md5("123456"),
         });
-    (await BannerModal.count())
+    // 初始化轮播图
+    (await bannerModel.count())
       ? () => {}
-      : await BannerModal.bulkCreate([
+      : await bannerModel.bulkCreate([
           {
             midImg:
               "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
