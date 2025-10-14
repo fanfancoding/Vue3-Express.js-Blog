@@ -21,7 +21,8 @@ import { initDb } from "./dao/db.js";
 // 引入路由模块
 import adminRouter from "./routes/admin.js";
 import captchaRouter from "./routes/captcha.js"; 
-import bannerRouter from "./routes/banner.js";       
+import bannerRouter from "./routes/banner.js";     
+import uploadRouter from "./routes/upload.js";
 
 // 在 ES 模块中获取 __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -75,6 +76,7 @@ app.use(
 app.use("/api/admin", adminRouter);
 app.use("/api/captcha", captchaRouter);
 app.use("/api/banner", bannerRouter);
+app.use("/api/upload", uploadRouter);
 
 // 404 路由处理
 app.use(function (req, res, next) {

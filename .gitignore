@@ -7,4 +7,4 @@ dist-ssr
 *.local
 yarn*
 .vscode
-.pnpm-lock.yaml
+pnpm-lock.yaml
