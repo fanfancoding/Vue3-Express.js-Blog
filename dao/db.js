@@ -3,6 +3,7 @@ import { sequelize } from "./dbConnect.js";
 import { adminModel } from "./model/adminModel.js";
 import { bannerModel } from "./model/bannerModel.js";
 import { BlogTypeModel } from "./model/BlogTypeModel.js";
+import { BlogModel } from "./model/blogModel.js";
 
 import md5 from "md5";
 
@@ -31,6 +32,23 @@ export async function initDb() {
               "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
             title: "banner1",
             descrption: "banner1描述",
+          },
+        ]);
+    // 初始化博客分类
+    (await BlogTypeModel.count())
+      ? () => {}
+      : await BlogTypeModel.bulkCreate([
+          {
+            name: "前端",
+            description: "前端相关博客",
+          },
+          {
+            name: "后端",
+            description: "后端相关博客",
+          },
+          {
+            name: "数据库",
+            description: "数据库相关博客",
           },
         ]);
   } catch (error) {

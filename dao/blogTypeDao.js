@@ -1,4 +1,4 @@
-import { BlogTypeModel } from "./model/blogTypeModel.js";
+import { BlogTypeModel } from "./model/BlogTypeModel.js";
 
 // 添加博客分类
 export async function addBlogTypeDao(newBlogTypeInfo) {
