@@ -37,6 +37,14 @@ export const BlogModel = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "BlogType",
+        key: "id",
+      },
+    },
   },
   {
     // 禁用 Sequelize 自动添加的表名后缀

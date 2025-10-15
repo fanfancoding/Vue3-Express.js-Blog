@@ -2,7 +2,7 @@
 import { sequelize } from "./dbConnect.js";
 import { adminModel } from "./model/adminModel.js";
 import { bannerModel } from "./model/bannerModel.js";
-import { BlogTypeModel } from "./model/BlogTypeModel.js";
+import { BlogTypeModel } from "./model/blogTypeModel.js";
 import { BlogModel } from "./model/blogModel.js";
 
 import md5 from "md5";
@@ -10,9 +10,22 @@ import md5 from "md5";
 // 初始化数据库
 export async function initDb() {
   try {
+    // 一对多关系：一个博客分类可以有多篇博客
+    BlogTypeModel.hasMany(BlogModel, {
+      foreignKey: "categoryId",
+      targetKey: "id",
+    });
+
+    // 多对一关系：一篇博客属于一个博客分类
+    BlogModel.belongsTo(BlogTypeModel, {
+      foreignKey: "categoryId",
+      targetKey: "id",
+      as: "category",
+    });
     // 同步数据库模型
-    await sequelize.sync({ alert: true });
+    await sequelize.sync({ alter: true });
     console.log("sql init success");
+
     // 初始化管理员账号
     (await adminModel.count())
       ? () => {}
@@ -40,15 +53,18 @@ export async function initDb() {
       : await BlogTypeModel.bulkCreate([
           {
             name: "前端",
-            description: "前端相关博客",
+            articleCount: 0,
+            order: 1,
           },
           {
             name: "后端",
-            description: "后端相关博客",
+            articleCount: 0,
+            order: 2,
           },
           {
             name: "数据库",
-            description: "数据库相关博客",
+            articleCount: 0,
+            order: 3,
           },
         ]);
   } catch (error) {

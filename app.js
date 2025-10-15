@@ -24,6 +24,7 @@ import captchaRouter from "./routes/captcha.js";
 import bannerRouter from "./routes/banner.js";
 import uploadRouter from "./routes/upload.js";
 import blogTypeRouter from "./routes/blogType.js";
+import blogRouter from "./routes/blog.js";
 
 // 在 ES 模块中获取 __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -76,13 +77,16 @@ app.use(
     ],
   })
 );
-
+      
 // 使用路由中间件
 app.use("/api/admin", adminRouter);
 app.use("/api/captcha", captchaRouter);
 app.use("/api/banner", bannerRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/blogType", blogTypeRouter);
+app.use("/api/blog", blogRouter);
+
+
 
 // 404 路由处理
 app.use(function (req, res, next) {
