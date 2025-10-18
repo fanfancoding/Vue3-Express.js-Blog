@@ -3,8 +3,10 @@ import md5 from "md5";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
+import pkg from "markdown-toc";
+const { toc } = pkg;
 
-// 在 ES 模块中获取 __dirname
+// 在 ES 模块中获取 __dirnames
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -64,4 +66,92 @@ export function uploadMulter() {
     storage: storage,
     limits: { fileSize: 1024 * 1024 * 2, files: 1 },
   });
+}
+
+export function transfer(faltArr) {
+  const stack = [];
+  const result = [];
+  let min = 6; //标题最小的级别
+  // 寻找当前数组中最小的级别
+  for (const item of faltArr) {
+    if (item.lvl < min) {
+      min = item.lvl;
+    }
+  }
+
+  // 创建TOC项
+  function createTocItem(item) {
+    return {
+      title: item.content,
+      level: item.lvl,
+      anchor: item.slug,
+      children: [],
+    };
+  }
+
+  // 处理数组项
+  function handleItem(item) {
+    // 获取栈顶元素
+    const top = stack[stack.length - 1];
+    if (!top) {
+      stack.push(item);
+    } else if (item.level > top.level) {
+      // 栈顶元素的级别小于当前项的级别，当前项成为栈顶元素 当前toc对象应该成为上一个toc对象的子元素
+      top.children.push(item);
+      stack.push(item);
+    } else {
+      // 栈顶元素的级别大于等于当前项的级别，弹出栈顶元素
+      stack.pop();
+      handleItem(item);
+    }
+  }
+
+  // 遍历数组 构建树结构
+  for (const item of faltArr) {
+    const tocItem = createTocItem(item);
+    // 处理最小级别的标题
+    if (tocItem.level === min) {
+      result.push(tocItem);
+    }
+    // 处理其他级别的标题
+    handleItem(tocItem);
+  }
+  return result;
+}
+
+// 处理TOC
+export function handleTOC(info) {
+  let res = toc(info.markdownContent || "").json;
+  info.toc = transfer(res);
+  delete info.markdownContent;
+  // 为各个级别的标题添加id属性
+  for (const item of res) {
+    switch (item.lvl) {
+      case 1:
+        var newStr = `<h1 id="${item.slug}"></h1>`;
+        info.htmlContent = info.htmlContent.replace("<h1>", newStr);
+        break;
+      case 2:
+        var newStr = `<h2 id="${item.slug}"></h2>`;
+        info.htmlContent = info.htmlContent.replace("<h2>", newStr);
+        break;
+      case 3:
+        var newStr = `<h3 id="${item.slug}"></h3>`;
+        info.htmlContent = info.htmlContent.replace("<h3>", newStr);
+        break;
+      case 4:
+        var newStr = `<h4 id="${item.slug}"></h4>`;
+        info.htmlContent = info.htmlContent.replace("<h4>", newStr);
+        break;
+      case 5:
+        var newStr = `<h5 id="${item.slug}"></h5>`;
+        info.htmlContent = info.htmlContent.replace("<h5>", newStr);
+        break;
+      case 6:
+        var newStr = `<h6 id="${item.slug}"></h6>`;
+        info.htmlContent = info.htmlContent.replace("<h6>", newStr);
+        break;
+    }
+  }
+  return info;
 }

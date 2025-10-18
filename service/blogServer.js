@@ -6,7 +6,7 @@ import {
   incrementBlogCountDao,
   findBlogTypeByIdDao,
 } from "../dao/blogTypeDao.js";
-import { formatResponseData, handleArrayResponseData } from "../utils/tool.js";
+import { formatResponseData, handleArrayResponseData, handleTOC } from "../utils/tool.js";
 import {
   addBlogDao,
   updateBlogDao,
@@ -25,7 +25,9 @@ validate.validators.categoryIdIsExist = async function (value) {
 };
 
 // 添加博客
-export async function addBlogService(blogInfo) {
+export async function addBlogService (blogInfo) {
+  blogInfo = handleTOC(blogInfo);
+
   // 处理 toc 字段
   blogInfo.toc = JSON.stringify(blogInfo.toc || []);
   // 初始化新文章的其他信息
@@ -147,6 +149,7 @@ export async function updateBlogService(id, blogInfo) {
     }
     // 判断正文是否修改 重新处理toc
     if (blogInfo.htmlContent) {
+      blogInfo = handleTOC(blogInfo);
       blogInfo.toc = JSON.stringify(blogInfo.toc || []);
     }
     // 处理 toc 字段
