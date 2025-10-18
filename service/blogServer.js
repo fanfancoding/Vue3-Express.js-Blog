@@ -2,9 +2,19 @@
 import { validate } from "validate.js";
 import { BlogTypeModel } from "../dao/model/blogTypeModel.js";
 import { ValidationError } from "../utils/errors.js";
-import { incrementBlogCountDao } from "../dao/blogTypeDao.js";
+import {
+  incrementBlogCountDao,
+  findBlogTypeByIdDao,
+} from "../dao/blogTypeDao.js";
 import { formatResponseData, handleArrayResponseData } from "../utils/tool.js";
-import { addBlogDao, findBlogByPageDao } from "../dao/blogDao.js";
+import {
+  addBlogDao,
+  updateBlogDao,
+  findBlogByPageDao,
+  findBlogByIdDao,
+  deleteBlogDao,
+} from "../dao/blogDao.js";
+
 validate.validators.categoryIdIsExist = async function (value) {
   const categoryId = value;
   console.log("验证categoryId:", categoryId);
@@ -101,6 +111,83 @@ export async function findBlogByPageService(pageInfo) {
     });
   } catch (error) {
     console.error("分页查询博客列表失败:", error);
+    throw error;
+  }
+}
+
+// 根据id获取博客
+export async function findBlogByIdService(id, token) {
+  try {
+    if (!id) {
+      throw new ValidationError("博客id不能为空");
+    }
+    const data = await findBlogByIdDao(id);
+    if (!data) {
+      throw new ValidationError("博客不存在");
+    }
+    // 针对 TOC 做 JSON 解析
+    data.dataValues.toc = JSON.parse(data.dataValues.toc || "[]");
+    // 前台访问 次数+1
+    if (!token) {
+      data.scanNumber++;
+      await data.save();
+    }
+    return formatResponseData(200, "根据id获取博客成功", data.dataValues);
+  } catch (error) {
+    console.error("根据ID查询博客失败:", error);
+    throw error;
+  }
+}
+
+// 更新博客
+export async function updateBlogService(id, blogInfo) {
+  try {
+    if (!id) {
+      throw new ValidationError("博客id不能为空");
+    }
+    // 判断正文是否修改 重新处理toc
+    if (blogInfo.htmlContent) {
+      blogInfo.toc = JSON.stringify(blogInfo.toc || []);
+    }
+    // 处理 toc 字段
+    blogInfo.toc = JSON.stringify(blogInfo.toc || []);
+    // 更新博客
+    const { dataValues } = await updateBlogDao(id, blogInfo);
+    if (!dataValues) {
+      throw new ValidationError("博客不存在");
+    }
+    return formatResponseData(200, "根据id更新博客成功", dataValues);
+  } catch (error) {
+    console.error("根据ID更新博客失败:", error);
+    throw error;
+  }
+}
+
+// 删除博客
+export async function deleteBlogService(id) {
+  try {
+    if (!id) {
+      throw new ValidationError("博客id不能为空");
+    }
+    // 检查博客是否存在
+    const data = await findBlogByIdDao(id);
+    if (data) {
+      // 需要根据该文章对应的分类, 减少文章分类关联的文章数量
+      const categoryInfo = await findBlogTypeByIdDao(data.categoryId);
+      if (categoryInfo) {
+        categoryInfo.articleCount--;
+        await categoryInfo.save();
+      }
+      // 删除该文章下的评论
+      // await deleteCommentByBlogIdDao(id);
+      // 删除文章
+      await deleteBlogDao(id);
+      return formatResponseData(200, "删除成功", true);
+    } else {
+      throw new ValidationError("博客不存在");
+    }
+  } catch (error) {
+    console.error("根据ID删除博客失败:", error);
     throw error;
   }
 }

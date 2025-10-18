@@ -16,7 +16,7 @@ export async function findBlogByPageDao(pageInfo) {
         {
           model: BlogTypeModel,
           as: "blogType",
-          where: { 
+          where: {
             id: pageInfo.categoryId * 1,
           },
         },
@@ -37,4 +37,35 @@ export async function findBlogByPageDao(pageInfo) {
       limit: pageInfo.limit * 1,
     });
   }
+}
+
+// 根据id获取博客
+export async function findBlogByIdDao(id) {
+  return await BlogModel.findByPk(id, {
+    include: [
+      {
+        model: BlogTypeModel,
+        as: "blogType",
+      },
+    ],
+  });
+}
+
+// 更新博客
+export async function updateBlogDao(id, blogInfo) {
+  await BlogModel.update(blogInfo, {
+    where: {
+      id,
+    },
+  });
+  return await findBlogByIdDao(id);
+}
+
+// 删除博客
+export async function deleteBlogDao(id) {
+  return await BlogModel.destroy({
+    where: {
+      id,
+    },
+  });
 }

@@ -79,6 +79,10 @@ app.use(
         methods: ["GET"],
       },
       {
+        url: /^\/api\/blog\/\d+$/,
+        methods: ["GET"],
+      },
+      {
         url: "/api/blogType",
         methods: ["GET"],
       },
@@ -86,7 +90,7 @@ app.use(
         url: "/api/banner",
         methods: ["GET"],
       },
-    ],
+    ],  
   })
 );
 
