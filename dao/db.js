@@ -20,7 +20,7 @@ export async function initDb() {
     BlogModel.belongsTo(BlogTypeModel, {
       foreignKey: "categoryId",
       targetKey: "id",
-      as: "category",
+      as: "blogType",
     });
     // 同步数据库模型
     await sequelize.sync({ alter: true });

@@ -74,10 +74,22 @@ app.use(
         url: "/api/captcha",
         methods: ["GET"],
       },
+      {
+        url: "/api/blog",
+        methods: ["GET"],
+      },
+      {
+        url: "/api/blogType",
+        methods: ["GET"],
+      },
+      {
+        url: "/api/banner",
+        methods: ["GET"],
+      },
     ],
   })
 );
-      
+
 // 使用路由中间件
 app.use("/api/admin", adminRouter);
 app.use("/api/captcha", captchaRouter);
@@ -86,9 +98,7 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/blogType", blogTypeRouter);
 app.use("/api/blog", blogRouter);
 
-
-
-// 404 路由处理
+// 404 路由处理 
 app.use(function (req, res, next) {
   next(createError(404));
 });

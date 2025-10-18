@@ -1,4 +1,4 @@
-import { BlogTypeModel } from "./model/BlogTypeModel.js";
+import { BlogTypeModel } from "./model/blogTypeModel.js";
 
 // 添加博客分类
 export async function addBlogTypeDao(newBlogTypeInfo) {
@@ -61,6 +61,19 @@ export async function deleteBlogTypeDao(id) {
     return { id };
   } catch (error) {
     console.error("删除博客分类失败:", error);
+    throw error;
+  }
+}
+
+// 根据 id 新增对应的博客分类的文章数量
+export async function incrementBlogCountDao(id) {
+  try {
+    const data = await BlogTypeModel.findByPk(id);
+    data.articleCount++;
+    await data.save();
+    return;
+  } catch (error) {
+    console.error("新增博客分类文章数量失败:", error);
     throw error;
   }
 }
