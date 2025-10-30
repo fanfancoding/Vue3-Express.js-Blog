@@ -37,8 +37,15 @@ var app = express();
 app.use(
   session({
     secret: md5(process.env.SESSION_SECRET), // md5加密后的密钥
-    resave: true,
-    saveUninitialized: true,
+    resave: false, // 不强制保存未修改的session
+    saveUninitialized: false, // 不保存未初始化的session
+    cookie: {
+      secure: false, // 在开发环境中设为false，生产环境中应设为true（需要HTTPS）
+      httpOnly: false, // 允许客户端JavaScript访问cookie（为了兼容性）
+      maxAge: 24 * 60 * 60 * 1000, // 24小时过期
+      sameSite: "lax", // 允许跨站请求携带cookie
+    },
+    name: "sessionId", // 自定义session cookie名称
   })
 );
 
@@ -53,13 +60,21 @@ app.set("view engine", "jade");
 
 // CORS 配置
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5174");
+  // 支持多个前端端口
+  const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization, Authorization_Token"
   );
   res.header("Access-Control-Allow-Credentials", "true");
+  // 暴露Authorization响应头，让前端可以访问
+  res.header("Access-Control-Expose-Headers", "Authorization");
 
   // 处理预检请求
   if (req.method === "OPTIONS") {

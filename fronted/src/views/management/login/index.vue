@@ -3,9 +3,6 @@
     <div class="login-form">
       <h1 class="login-title">管理员登录</h1>
       <el-form :model="myForm" :rules="rules" ref="myFormModalRef" label-width="120px">
-        <el-form-item label="用户名" prop="name">
-          <el-input v-model="myForm.name" placeholder="请输入用户名" />
-        </el-form-item>
         <el-form-item label="登录ID" prop="loginId">
           <el-input v-model="myForm.loginId" placeholder="请输入登录ID" />
         </el-form-item>
@@ -14,9 +11,9 @@
         </el-form-item>
         <el-form-item label="验证码" prop="captcha">
           <div class="captcha-container">
-            <el-input 
-              v-model="myForm.captcha" 
-              placeholder="请输入验证码" 
+            <el-input
+              v-model="myForm.captcha"
+              placeholder="请输入验证码"
               class="captcha-input"
               maxlength="4"
             />
@@ -53,7 +50,6 @@ const loginLoading = ref(false)
 const captchaUrl = ref('')
 
 const { myForm, myFormModalRef } = useFormModal({
-  name: '',
   loginId: '',
   loginPwd: '',
   captcha: '',
@@ -61,22 +57,18 @@ const { myForm, myFormModalRef } = useFormModal({
 
 // 表单验证规则
 const rules = {
-  name: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 2, max: 20, message: '用户名长度在 2 到 20 个字符', trigger: 'blur' }
-  ],
   loginId: [
     { required: true, message: '请输入登录ID', trigger: 'blur' },
-    { min: 3, max: 20, message: '登录ID长度在 3 到 20 个字符', trigger: 'blur' }
+    { min: 3, max: 20, message: '登录ID长度在 3 到 20 个字符', trigger: 'blur' },
   ],
   loginPwd: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, max: 20, message: '密码长度在 6 到 20 个字符', trigger: 'blur' }
+    { min: 6, max: 20, message: '密码长度在 6 到 20 个字符', trigger: 'blur' },
   ],
   captcha: [
     { required: true, message: '请输入验证码', trigger: 'blur' },
-    { len: 4, message: '验证码长度为4位', trigger: 'blur' }
-  ]
+    { len: 4, message: '验证码长度为4位', trigger: 'blur' },
+  ],
 }
 
 // 获取验证码
@@ -107,21 +99,26 @@ async function handleLogin() {
   try {
     await myFormModalRef.value.validate()
     loginLoading.value = true
-    
+
     const res = await login({
-      name: myForm.name,
       loginId: myForm.loginId,
       loginPwd: encryptPassword(myForm.loginPwd),
       captcha: myForm.captcha,
+      remember: 7,
     })
-    
+
     if (res.data.code === 200) {
       // 保存用户信息和token
-      const token = res.headers.authorization
-      userStore.login(token, res.data.data)
-      
-      ElMessage.success('登录成功')
-      router.push('/management')
+      // 后端通过Authorization响应头返回token
+      const token = res.headers.authorization || res.headers.Authorization
+      if (token) {
+        userStore.login(token, res.data.data)
+        ElMessage.success('登录成功')
+        router.push('/management')
+      } else {
+        ElMessage.error('登录失败：未获取到token')
+        refreshCaptcha()
+      }
     } else {
       ElMessage.error(res.data.msg || '登录失败')
       refreshCaptcha() // 登录失败刷新验证码

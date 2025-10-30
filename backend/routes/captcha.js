@@ -3,7 +3,6 @@ const router = express.Router();
 
 import { getCaptchaServer } from "../service/captchaServer.js";
 
-
 router.get("/", async (req, res, next) => {
   // 生成验证码
   const captcha = await getCaptchaServer();

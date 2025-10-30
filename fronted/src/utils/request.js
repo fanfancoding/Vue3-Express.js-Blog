@@ -8,6 +8,7 @@ import { responseTypeMap } from '@/enum/index.js'
 const request = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 5000,
+  withCredentials: true, // 允许携带cookie，支持session
 })
 
 // 创建一个loading实例的引用
@@ -50,11 +51,19 @@ request.interceptors.response.use(
       loadingInstance = null
     }
     
+    // 检查响应头中的token（用于登录接口）
     const userStore = useUserStore()
-    const { token } = response.data
+    const headerToken = response.headers.authorization || response.headers.Authorization
+    if (headerToken) {
+      userStore.setToken(headerToken)
+    }
+    
+    // 检查响应数据中的token（兼容其他可能的接口）
+    const { token } = response.data || {}
     if (token) {
       userStore.setToken(token)
     }
+    
     return response
   },
   (error) => {
