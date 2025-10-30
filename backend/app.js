@@ -51,6 +51,24 @@ await initDb();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
+// CORS 配置
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:5174");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, Authorization_Token"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  // 处理预检请求
+  if (req.method === "OPTIONS") {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 // 中间件
 app.use(logger("dev"));
 app.use(express.json());
@@ -90,7 +108,7 @@ app.use(
         url: "/api/banner",
         methods: ["GET"],
       },
-    ],  
+    ],
   })
 );
 
@@ -102,7 +120,7 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/blogType", blogTypeRouter);
 app.use("/api/blog", blogRouter);
 
-// 404 路由处理 
+// 404 路由处理
 app.use(function (req, res, next) {
   next(createError(404));
 });
