@@ -17,3 +17,102 @@ export const getCaptcha = () => {
     responseType: 'blob', // 接收二进制数据
   })
 }
+
+// 获取文章列表
+export const getArticleListRequest = (params) => {
+  return request({
+    url: '/blog',
+    method: 'GET',
+    params,
+  })
+}
+
+// 获取文章类型
+export const getArticleTypeRequest = () => {
+  return request({
+    url: '/blogType',
+    method: 'GET',
+  })
+}
+
+// 新增文章类型
+export const addArticleTypeRequest = (data) => {
+  return request({
+    url: '/blogType',
+    method: 'POST',
+    data,
+  })
+}
+
+// 删除单个文章类型
+export const deleteArticleTypeRequest = (id) => {
+  return request({
+    url: `/blogType/${id}`,
+    method: 'DELETE',
+  })
+}
+
+// 更新单个文章类型
+export const updateArticleTypeRequest = (id, data) => {
+  return request({
+    url: `/blogType/${id}`,
+    method: 'PUT',
+    data,
+  })
+}
+
+// 获取单个文章类型
+export const getArticleTypeByIdRequest = (id) => {
+  return request({
+    url: `/blogType/${id}`,
+    method: 'GET',
+  })
+}
+
+// ========== 文章相关 API ==========
+
+// 获取单个文章详情
+export const getArticleByIdRequest = (id) => {
+  return request({
+    url: `/blog/${id}`,
+    method: 'GET',
+  })
+}
+
+// 新增文章
+export const addArticleRequest = (data) => {
+  return request({
+    url: '/blog',
+    method: 'POST',
+    data,
+  })
+}
+
+// 更新文章
+export const updateArticleRequest = (id, data) => {
+  return request({
+    url: `/blog/${id}`,
+    method: 'PUT',
+    data,
+  })
+}
+
+// 删除文章
+export const deleteArticleRequest = (id) => {
+  return request({
+    url: `/blog/${id}`,
+    method: 'DELETE',
+  })
+}
+
+// 上传图片
+export const uploadImageRequest = (formData) => {
+  return request({
+    url: '/upload',
+    method: 'POST',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+}

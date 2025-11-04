@@ -11,19 +11,22 @@ export const BlogModel = sequelize.define(
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    toc: {
-      type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true, // 允许为空
+      defaultValue: "",
     },
     htmlContent: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    markdownContent: {
+      type: DataTypes.TEXT,
+      allowNull: true, // 允许为空，因为旧文章可能没有 Markdown
+      defaultValue: "",
+    },
     thumb: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true, // 允许为空
+      defaultValue: "", // 默认值为空字符串
     },
     scanNumber: {
       type: DataTypes.INTEGER,

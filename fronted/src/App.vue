@@ -1,9 +1,11 @@
 <template>
-  <div v-if="showLogin">
-    <Login />
-  </div>
-  <div v-else>
-    <Layout />
+  <div class="m-0">
+    <div v-if="showLogin">
+      <Login />
+    </div>
+    <div v-else>
+      <Layout />
+    </div>
   </div>
 </template>
 
@@ -22,4 +24,27 @@ watchEffect(() => {
 })
 </script>
 
-<style scoped></style>
+<style>
+/* 全局样式重置 - 清除浏览器默认的8px margin */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+}
+</style>
+
+<style scoped>
+body {
+  margin: 0 !important;
+}
+</style>

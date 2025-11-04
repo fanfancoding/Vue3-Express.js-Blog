@@ -1,7 +1,10 @@
 import express from "express";
 const router = express.Router();
 
-import { findBannerListService, updateBannerListService } from "../service/bannerServer.js";
+import {
+  findBannerListService,
+  updateBannerListService,
+} from "../service/bannerServer.js";
 
 // 获取banner列表
 router.get("/", async (req, res, next) => {

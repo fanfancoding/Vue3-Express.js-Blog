@@ -1,4 +1,3 @@
-v3
 <template>
   <div>
     <template v-if="isShowManagement">
@@ -24,7 +23,7 @@ defineOptions({
 
 // 使用 watchEffect 响应式地监听路由变化
 watchEffect(() => {
-  isShowManagement.value = route.path === '/management'
+  isShowManagement.value = route.path.startsWith('/management')
 })
 </script>
 

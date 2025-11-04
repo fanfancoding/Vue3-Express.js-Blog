@@ -3,8 +3,17 @@ import { BlogTypeModel } from "./model/blogTypeModel.js";
 
 // 添加博客
 export async function addBlogDao(blogInfo) {
-  const { dataValues } = await BlogModel.create(blogInfo);
-  return dataValues;
+  try {
+    console.log("DAO层：准备插入博客数据");
+    const { dataValues } = await BlogModel.create(blogInfo);
+    console.log("DAO层：博客插入成功，ID:", dataValues.id);
+    return dataValues;
+  } catch (error) {
+    console.error("DAO层：博客插入失败，错误类型:", error.name);
+    console.error("DAO层：错误信息:", error.message);
+    console.error("DAO层：错误详情:", error);
+    throw error;
+  }
 }
 
 // 根据分页获取博客列表

@@ -69,6 +69,11 @@ export async function deleteBlogTypeDao(id) {
 export async function incrementBlogCountDao(id) {
   try {
     const data = await BlogTypeModel.findByPk(id);
+    if (!data) {
+      // 如果分类不存在，直接返回，不抛出数据库错误
+      console.warn(`增量分类文章数量失败：分类ID ${id} 不存在`);
+      return;
+    }
     data.articleCount++;
     await data.save();
     return;

@@ -121,37 +121,88 @@ export function transfer(faltArr) {
 
 // 处理TOC
 export function handleTOC(info) {
-  let res = toc(info.markdownContent || "").json;
-  info.toc = transfer(res);
-  delete info.markdownContent;
-  // 为各个级别的标题添加id属性
-  for (const item of res) {
-    switch (item.lvl) {
-      case 1:
-        var newStr = `<h1 id="${item.slug}"></h1>`;
-        info.htmlContent = info.htmlContent.replace("<h1>", newStr);
-        break;
-      case 2:
-        var newStr = `<h2 id="${item.slug}"></h2>`;
-        info.htmlContent = info.htmlContent.replace("<h2>", newStr);
-        break;
-      case 3:
-        var newStr = `<h3 id="${item.slug}"></h3>`;
-        info.htmlContent = info.htmlContent.replace("<h3>", newStr);
-        break;
-      case 4:
-        var newStr = `<h4 id="${item.slug}"></h4>`;
-        info.htmlContent = info.htmlContent.replace("<h4>", newStr);
-        break;
-      case 5:
-        var newStr = `<h5 id="${item.slug}"></h5>`;
-        info.htmlContent = info.htmlContent.replace("<h5>", newStr);
-        break;
-      case 6:
-        var newStr = `<h6 id="${item.slug}"></h6>`;
-        info.htmlContent = info.htmlContent.replace("<h6>", newStr);
-        break;
+  try {
+    // 如果没有 markdownContent，返回空 TOC
+    if (!info.markdownContent || !info.markdownContent.trim()) {
+      info.toc = [];
+      return info;
     }
+
+    // 如果没有 htmlContent，无法处理 TOC
+    if (!info.htmlContent || !info.htmlContent.trim()) {
+      info.toc = [];
+      return info;
+    }
+
+    let res = toc(info.markdownContent || "").json;
+    
+    // 如果 TOC 解析失败，返回空数组
+    if (!res || !Array.isArray(res)) {
+      info.toc = [];
+      return info;
+    }
+
+    info.toc = transfer(res);
+    
+    // 保存 markdownContent（虽然会被删除，但调用者会恢复）
+    const markdownContent = info.markdownContent;
+    delete info.markdownContent;
+    
+    // 为各个级别的标题添加id属性（只替换第一个匹配的）
+    for (const item of res) {
+      if (!item || !item.lvl || !item.slug) continue;
+      
+      try {
+        switch (item.lvl) {
+          case 1:
+            var newStr = `<h1 id="${item.slug}">`;
+            // 只替换第一个匹配的
+            if (info.htmlContent.includes("<h1>")) {
+              info.htmlContent = info.htmlContent.replace("<h1>", newStr);
+            }
+            break;
+          case 2:
+            var newStr = `<h2 id="${item.slug}">`;
+            if (info.htmlContent.includes("<h2>")) {
+              info.htmlContent = info.htmlContent.replace("<h2>", newStr);
+            }
+            break;
+          case 3:
+            var newStr = `<h3 id="${item.slug}">`;
+            if (info.htmlContent.includes("<h3>")) {
+              info.htmlContent = info.htmlContent.replace("<h3>", newStr);
+            }
+            break;
+          case 4:
+            var newStr = `<h4 id="${item.slug}">`;
+            if (info.htmlContent.includes("<h4>")) {
+              info.htmlContent = info.htmlContent.replace("<h4>", newStr);
+            }
+            break;
+          case 5:
+            var newStr = `<h5 id="${item.slug}">`;
+            if (info.htmlContent.includes("<h5>")) {
+              info.htmlContent = info.htmlContent.replace("<h5>", newStr);
+            }
+            break;
+          case 6:
+            var newStr = `<h6 id="${item.slug}">`;
+            if (info.htmlContent.includes("<h6>")) {
+              info.htmlContent = info.htmlContent.replace("<h6>", newStr);
+            }
+            break;
+        }
+      } catch (err) {
+        console.error(`处理标题级别 ${item.lvl} 时出错:`, err);
+        // 继续处理下一个
+      }
+    }
+    
+    return info;
+  } catch (error) {
+    console.error("handleTOC 函数出错:", error);
+    // 出错时返回空 TOC
+    info.toc = [];
+    return info;
   }
-  return info;
 }

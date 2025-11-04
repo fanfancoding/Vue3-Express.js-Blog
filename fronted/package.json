@@ -14,8 +14,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
     "axios": "^1.13.1",
     "element-plus": "^2.11.5",
+    "md-editor-v3": "^6.1.1",
     "md5": "^2.3.0",
     "pinia": "^3.0.3",
     "vue": "^3.5.22",
