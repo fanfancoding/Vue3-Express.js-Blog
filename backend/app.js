@@ -128,7 +128,7 @@ const jwtMiddleware = expressjwt({
       url: "/api/banner",
       methods: ["GET"],
     },
-  ]
+  ],
 });
 
 app.use(jwtMiddleware);
@@ -163,7 +163,7 @@ app.use(function (err, req, res, next) {
       code: err.code,
       inner: err.inner?.message,
     });
-    
+
     // 根据错误类型返回不同的错误信息
     let errorMsg = "token 无效";
     if (err.message === "jwt expired") {
@@ -175,7 +175,7 @@ app.use(function (err, req, res, next) {
     } else if (err.message === "invalid signature") {
       errorMsg = "token 签名无效";
     }
-    
+
     return res.send(new ForbiddenError(errorMsg).toResponseJSON());
   }
 

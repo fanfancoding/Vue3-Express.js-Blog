@@ -116,3 +116,12 @@ export const uploadImageRequest = (formData) => {
     },
   })
 }
+
+// 修改账号信息
+export const updateAdminInfoRequest = (data) => {
+  return request({
+    url: '/admin',
+    method: 'PUT',
+    data,
+  })
+}

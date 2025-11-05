@@ -1,4 +1,3 @@
-v3
 <template>
   <div>
     <h1>Front Desk Home</h1>

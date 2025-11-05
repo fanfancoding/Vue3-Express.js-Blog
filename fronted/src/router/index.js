@@ -50,6 +50,18 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/blog',
+      name: 'blogPage',
+      redirect: '/blog/home',
+      children: [
+        {
+          path: 'home',
+          name: 'blogHomePage',
+          component: () => import('@/views/frontDesk/home/index.vue'),
+        },
+      ],
+    },
   ],
 })
 

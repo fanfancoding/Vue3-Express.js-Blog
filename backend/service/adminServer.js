@@ -7,7 +7,7 @@ import { formatResponseData } from "../utils/tool.js";
 // 登录服务
 export async function adminLoginServer(loginInfo) {
   let { loginId, loginPwd } = loginInfo;
-  
+
   // 检查密码是否已经是MD5格式（32位十六进制字符串）
   const isMD5 = /^[a-f0-9]{32}$/i.test(loginPwd);
   if (!isMD5) {
@@ -15,7 +15,7 @@ export async function adminLoginServer(loginInfo) {
   }
 
   let result = await adminLoginDao({ loginId, loginPwd });
-  
+
   if (result && result.dataValues) {
     result = result.dataValues;
     let tokenExprieTime = loginInfo.remember ? Number(loginInfo.remember) : 1;
