@@ -30,6 +30,7 @@ import bannerRouter from "./routes/banner.js";
 import uploadRouter from "./routes/upload.js";
 import blogTypeRouter from "./routes/blogType.js";
 import blogRouter from "./routes/blog.js";
+import commentRouter from "./routes/comment.js";
 
 // 在 ES 模块中获取 __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -128,6 +129,14 @@ const jwtMiddleware = expressjwt({
       url: "/api/banner",
       methods: ["GET"],
     },
+    {
+      url: /^\/api\/comment\/blog\/\d+$/,
+      methods: ["GET"],
+    },
+    {
+      url: "/api/comment",
+      methods: ["POST"],
+    },
   ],
 });
 
@@ -140,6 +149,7 @@ app.use("/api/banner", bannerRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/blogType", blogTypeRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/comment", commentRouter);
 
 // 404 路由处理
 app.use(function (req, res, next) {

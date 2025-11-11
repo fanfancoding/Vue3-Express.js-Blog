@@ -125,3 +125,19 @@ export const updateAdminInfoRequest = (data) => {
     data,
   })
 }
+
+// 获取所有评论统计（后台管理用）
+export const getAllCommentsRequest = () => {
+  return request({
+    url: '/comment/all',
+    method: 'GET',
+  })
+}
+
+// 获取文章的所有评论统计
+export const getCommentsByBlogIdRequest = (blogId) => {
+  return request({
+    url: `/comment/blog/${blogId}`,
+    method: 'GET',
+  })
+}

@@ -5,7 +5,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/management/article',
+      redirect: '/blog/home',
     },
     {
       path: '/login',
@@ -59,6 +59,11 @@ const router = createRouter({
           path: 'home',
           name: 'blogHomePage',
           component: () => import('@/views/frontDesk/home/index.vue'),
+        },
+        {
+          path: 'article/:id',
+          name: 'articleDetailPage',
+          component: () => import('@/views/frontDesk/article/index.vue'),
         },
       ],
     },

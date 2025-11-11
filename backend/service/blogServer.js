@@ -14,6 +14,7 @@ import {
   findBlogByIdDao,
   deleteBlogDao,
 } from "../dao/blogDao.js";
+import { deleteCommentsByBlogIdDao } from "../dao/commentDao.js";
 import MarkdownIt from "markdown-it";
 
 // 初始化 Markdown-it
@@ -296,7 +297,7 @@ export async function deleteBlogService(id) {
         await categoryInfo.save();
       }
       // 删除该文章下的评论
-      // await deleteCommentByBlogIdDao(id);
+      await deleteCommentsByBlogIdDao(id);
       // 删除文章
       await deleteBlogDao(id);
       return formatResponseData(200, "删除成功", true);

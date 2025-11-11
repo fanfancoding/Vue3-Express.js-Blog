@@ -4,6 +4,7 @@ import { adminModel } from "./model/adminModel.js";
 import { bannerModel } from "./model/bannerModel.js";
 import { BlogTypeModel } from "./model/blogTypeModel.js";
 import { BlogModel } from "./model/blogModel.js";
+import { CommentModel } from "./model/commentModel.js";
 
 import md5 from "md5";
 
@@ -22,6 +23,21 @@ export async function initDb() {
       targetKey: "id",
       as: "blogType",
     });
+
+    // 一对多关系：一篇博客可以有多个评论（不同emoji）
+    BlogModel.hasMany(CommentModel, {
+      foreignKey: "blogId",
+      targetKey: "id",
+      as: "comments",
+    });
+
+    // 多对一关系：一个评论属于一篇博客
+    CommentModel.belongsTo(BlogModel, {
+      foreignKey: "blogId",
+      targetKey: "id",
+      as: "blog",
+    });
+
     // 同步数据库模型
     await sequelize.sync({ alter: true });
     console.log("sql init success");

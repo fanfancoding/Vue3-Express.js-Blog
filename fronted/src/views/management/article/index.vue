@@ -46,7 +46,13 @@
         </el-table-column>
         <el-table-column prop="description" label="描述" min-width="200" show-overflow-tooltip />
         <el-table-column prop="scanNumber" label="浏览量" width="100" />
-        <el-table-column prop="commentNumber" label="评论数" width="100" />
+        <el-table-column prop="commentNumber" label="评论数" width="120">
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleViewComments(row)">
+              {{ row.commentNumber }}
+            </el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间" width="180">
           <template #default="{ row }">
             {{ formatDate(row.createDate) }}
@@ -73,14 +79,38 @@
         @current-change="handleCurrentChange"
       />
     </div>
+
+    <!-- 评论详情对话框 -->
+    <el-dialog v-model="commentDialogVisible" title="评论统计详情" width="600px">
+      <div v-if="currentArticleComments.length > 0" class="comment-detail">
+        <div class="comment-header">
+          <h3>{{ currentArticleTitle }}</h3>
+          <p>总评论数: {{ totalCommentCount }}</p>
+        </div>
+        <div class="comment-list">
+          <div v-for="(comment, index) in currentArticleComments" :key="index" class="comment-item">
+            <span class="emoji">{{ comment.emoji }}</span>
+            <span class="count">{{ comment.count }}</span>
+          </div>
+        </div>
+      </div>
+      <div v-else class="no-comments">
+        <el-empty description="暂无评论" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { defineOptions, ref, onMounted, reactive } from 'vue'
+import { defineOptions, ref, onMounted, reactive, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import { getArticleListRequest, getArticleTypeRequest, deleteArticleRequest } from '@/api/manage'
+import {
+  getArticleListRequest,
+  getArticleTypeRequest,
+  deleteArticleRequest,
+  getCommentsByBlogIdRequest,
+} from '@/api/manage'
 import { useFormModal } from '@/hooks/formModal'
 import { handleResponse } from '@/utils/common'
 import { useRouter } from 'vue-router'
@@ -137,6 +167,14 @@ const categoryOptions = ref([])
 // 文章列表
 const articleList = ref([])
 const loading = ref(false)
+
+// 评论详情对话框
+const commentDialogVisible = ref(false)
+const currentArticleComments = ref([])
+const currentArticleTitle = ref('')
+const totalCommentCount = computed(() => {
+  return currentArticleComments.value.reduce((sum, item) => sum + item.count, 0)
+})
 
 // 搜索
 const handleSearch = () => {
@@ -212,6 +250,28 @@ const handleCurrentChange = (val) => {
   pagination.currentPage = val
   getArticleList()
 }
+
+// 查看评论详情
+const handleViewComments = async (row) => {
+  try {
+    currentArticleTitle.value = row.title
+    const res = await getCommentsByBlogIdRequest(row.id)
+    const data = handleResponse(res, false) || []
+    // 确保所有6个emoji都有数据
+    const emojiList = ['👍', '❤️', '😂', '😮', '😢', '😡']
+    currentArticleComments.value = emojiList.map((emoji) => {
+      const found = data.find((d) => d.emoji === emoji)
+      return {
+        emoji,
+        count: found ? found.count : 0,
+      }
+    })
+    commentDialogVisible.value = true
+  } catch (error) {
+    ElMessage.error('获取评论详情失败')
+    console.error(error)
+  }
+}
 </script>
 
 <style scoped>
@@ -245,5 +305,56 @@ const handleCurrentChange = (val) => {
 .pagination-container {
   display: flex;
   justify-content: flex-end;
+}
+
+.comment-detail {
+  padding: 10px 0;
+}
+
+.comment-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.comment-header h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: #303133;
+}
+
+.comment-header p {
+  margin: 0;
+  color: #606266;
+  font-size: 14px;
+}
+
+.comment-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.comment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background: #f5f7fa;
+  border-radius: 6px;
+}
+
+.comment-item .emoji {
+  font-size: 24px;
+}
+
+.comment-item .count {
+  font-size: 16px;
+  font-weight: 600;
+  color: #409eff;
+}
+
+.no-comments {
+  padding: 40px 0;
 }
 </style>
