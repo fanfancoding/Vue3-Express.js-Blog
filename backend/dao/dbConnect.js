@@ -11,6 +11,10 @@ export const sequelize = new Sequelize(
     // 数据库类型
     dialect: "mysql",
     logging: false,
+    define: {
+      charset: "utf8mb4",
+      collate: "utf8mb4_unicode_ci",
+    },
   }
 );
 

@@ -10,7 +10,7 @@
         <ListItem v-for="item in blogList" :key="item.id" :item="item" />
       </el-col>
       <el-col :span="5">
-        <div class="bg-[white] h-[280px] shadow-md p-6 rounded-xl overflow-hidden">
+        <div class="bg-[white] shadow-md p-6 rounded-xl overflow-hidden">
           <div
             class="w-[200px] h-[150px] flex justify-center align-center items-center overflow-hidden"
           >

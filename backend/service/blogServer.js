@@ -201,7 +201,11 @@ export async function findBlogByPageService(pageInfo) {
 }
 
 // 根据id获取博客
-export async function findBlogByIdService(id, token) {
+export async function findBlogByIdService(
+  id,
+  token,
+  isFrontendRequest = false
+) {
   try {
     if (!id) {
       throw new ValidationError("博客id不能为空");
@@ -210,12 +214,14 @@ export async function findBlogByIdService(id, token) {
     if (!data) {
       throw new ValidationError("博客不存在");
     }
-    // 前台访问 次数+1
-    if (!token) {
+    // 如果是前台访问，无论是否登录都增加浏览量
+    // 如果是管理后台访问（没有 X-Request-Source: frontend header），则不增加浏览量
+    if (isFrontendRequest) {
       data.scanNumber++;
       await data.save();
     }
-    return formatResponseData(200, "根据id获取博客成功", data.dataValues);
+    // 使用 toJSON() 获取包含关联数据的完整对象
+    return formatResponseData(200, "根据id获取博客成功", data.toJSON());
   } catch (error) {
     console.error("根据ID查询博客失败:", error);
     throw error;

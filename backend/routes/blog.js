@@ -21,7 +21,15 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const reqHeader = req.headers;
-    res.send(await findBlogByIdService(req.params.id, reqHeader.authorization));
+    // 检查是否是前台访问（通过 X-Request-Source header 判断）
+    const isFrontendRequest = reqHeader["x-request-source"] === "frontend";
+    res.send(
+      await findBlogByIdService(
+        req.params.id,
+        reqHeader.authorization,
+        isFrontendRequest
+      )
+    );
   } catch (error) {
     next(error);
   }

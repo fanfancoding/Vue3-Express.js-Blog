@@ -6,3 +6,9 @@ export const responseTypeMap = new Map([
   ['stream', 'text/event-stream'],
   ['arrayBuffer', 'application/octet-stream'],
 ])
+
+export const CATEGORY_TYPE = {
+  ARTICLE: 'article',
+  ESSAY: 'essay',
+  ALL: 'all',
+}

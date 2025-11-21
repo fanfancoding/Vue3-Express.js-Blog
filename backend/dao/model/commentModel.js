@@ -31,5 +31,7 @@ export const CommentModel = sequelize.define(
     // 禁用 Sequelize 自动添加的 createdAt 和 updatedAt 字段
     createdAt: false,
     updatedAt: false,
+    charset: "utf8mb4",
+    collate: "utf8mb4_unicode_ci",
   }
 );

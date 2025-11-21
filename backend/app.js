@@ -76,7 +76,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization, Authorization_Token"
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, Authorization_Token, X-Request-Source"
   );
   res.header("Access-Control-Allow-Credentials", "true");
   // 暴露Authorization响应头，让前端可以访问
@@ -149,6 +149,7 @@ app.use("/api/banner", bannerRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/blogType", blogTypeRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/comment", commentRouter);
 app.use("/api/comment", commentRouter);
 
 // 404 路由处理

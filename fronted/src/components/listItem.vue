@@ -18,7 +18,7 @@
         </div>
         <div class="px-2">{{ item.scanNumber }}</div>
         <div class="pr-2">|</div>
-        <div>{{ dayjs(item.createDate).format('YYYY-MM-DD') }}</div>
+        <div>{{ formatDate(item.createDate) }}</div>
       </div>
       <div></div>
     </div>
@@ -59,9 +59,21 @@ watch(
   },
 )
 
+// 格式化日期（与详情页保持一致）
+function formatDate(timestamp) {
+  // 如果 timestamp 是字符串，转换为数字
+  const ts = typeof timestamp === 'string' ? Number(timestamp) : timestamp
+  return dayjs(ts).format('YYYY-MM-DD HH:mm:ss')
+}
+
 // 点击跳转到文章详情
 function handleClick(articleId) {
-  router.push(`/blog/article/${articleId}`)
+  router.push({
+    name: 'ArticleDetailPage',
+    params: {
+      id: articleId,
+    },
+  })
 }
 </script>
 

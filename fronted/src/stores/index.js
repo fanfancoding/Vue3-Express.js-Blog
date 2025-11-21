@@ -1,5 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { getBlogCategoryListRequest } from '@/api/blog'
+import { handleResponse } from '@/utils/common'
 
 export const useUserStore = defineStore('user', () => {
   // 状态
@@ -48,5 +50,18 @@ export const useUserStore = defineStore('user', () => {
     setUserInfo,
     logout,
     login,
+  }
+})
+
+export const useBlogTypeStore = defineStore('blogType', () => {
+  const blogTypeList = ref([])
+  async function getBlogTypeList() {
+    const res = await getBlogCategoryListRequest()
+    const data = handleResponse(res, false) || []
+    blogTypeList.value = data
+  }
+  return {
+    blogTypeList,
+    getBlogTypeList,
   }
 })

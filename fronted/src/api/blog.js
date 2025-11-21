@@ -9,11 +9,14 @@ export const getBlogListRequest = (params) => {
   })
 }
 
-// 获取文章详情
+// 获取文章详情（前台访问，会增加浏览量）
 export const getBlogDetailRequest = (id) => {
   return request({
     url: `/blog/${id}`,
     method: 'GET',
+    headers: {
+      'X-Request-Source': 'frontend', // 标识这是前台访问，需要增加浏览量
+    },
   })
 }
 

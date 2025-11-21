@@ -42,6 +42,16 @@ export async function initDb() {
     await sequelize.sync({ alter: true });
     console.log("sql init success");
 
+    // 强制将评论表转换为支持 emoji 的字符集和排序规则
+    try {
+      await sequelize.query(
+        "ALTER TABLE `Comment` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+      );
+    } catch (err) {
+      // 如果表已是 utf8mb4 或不支持转换，记录警告并继续
+      console.warn("Comment 表字符集/排序规则转换跳过:", err?.message || err);
+    }
+
     // 初始化管理员账号
     (await adminModel.count())
       ? () => {}
