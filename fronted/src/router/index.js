@@ -70,6 +70,21 @@ const router = createRouter({
           name: 'ArticleDetailPage',
           component: () => import('@/views/frontDesk/article/detail.vue'),
         },
+        {
+          path: 'about',
+          name: 'AboutPage',
+          component: () => import('@/views/frontDesk/about/index.vue'),
+        },
+        {
+          path: 'about/me',
+          name: 'AboutMePage',
+          component: () => import('@/views/frontDesk/about/about-me.vue'),
+        },
+        {
+          path: 'about/site',
+          name: 'AboutSitePage',
+          component: () => import('@/views/frontDesk/about/about-site.vue'),
+        },
       ],
     },
   ],

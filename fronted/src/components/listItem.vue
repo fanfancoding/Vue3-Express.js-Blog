@@ -2,25 +2,24 @@
   <div
     v-for="item in blogItem"
     :key="item.id"
-    class="h-[180px] w-full bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg hover:bg-[#d9d9d6] transition-shadow mb-4"
+    class="list-item-card w-full bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg hover:bg-[#d9d9d6] transition-shadow mb-4"
     @click="handleClick(item.id)"
   >
-    <h2 class="text-[#82411c] text-[20px] font-bold pb-7">{{ item.title }}</h2>
-    <div class="text-[14px] text-[black] line-clamp-3 font-normal">{{ item.description }}</div>
-    <div class="py-4 text-[gray]">
-      <div class="flex justify-start items-center">
-        <div>Tarzan</div>
-        <div class="px-2">|</div>
-        <div>{{ item.blogType?.name }}</div>
-        <div class="px-2">|</div>
+    <h2 class="item-title text-[#82411c] font-bold pb-7">{{ item.title }}</h2>
+    <div class="item-description text-[black] line-clamp-3 font-normal">{{ item.description }}</div>
+    <div class="item-meta py-4 text-[gray]">
+      <div class="meta-info flex justify-start items-center flex-wrap">
+        <div class="meta-item">Tarzan</div>
+        <div class="meta-divider">|</div>
+        <div class="meta-item">{{ item.blogType?.name }}</div>
+        <div class="meta-divider">|</div>
         <div class="flex items-center">
           <el-icon><View class="w-4 h-4" /></el-icon>
         </div>
-        <div class="px-2">{{ item.scanNumber }}</div>
-        <div class="pr-2">|</div>
-        <div>{{ formatDate(item.createDate) }}</div>
+        <div class="meta-item px-2">{{ item.scanNumber }}</div>
+        <div class="meta-divider">|</div>
+        <div class="meta-item meta-date">{{ formatDate(item.createDate) }}</div>
       </div>
-      <div></div>
     </div>
   </div>
 </template>
@@ -77,4 +76,95 @@ function handleClick(articleId) {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.list-item-card {
+  height: 180px;
+
+  @media (max-width: 768px) {
+    height: auto;
+    min-height: 150px;
+    padding: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.75rem;
+    min-height: 130px;
+  }
+
+  .item-title {
+    font-size: 20px;
+
+    @media (max-width: 768px) {
+      font-size: 18px;
+      padding-bottom: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 16px;
+      padding-bottom: 0.75rem;
+    }
+  }
+
+  .item-description {
+    font-size: 14px;
+
+    @media (max-width: 768px) {
+      font-size: 13px;
+      -webkit-line-clamp: 2;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 12px;
+      -webkit-line-clamp: 2;
+    }
+  }
+
+  .item-meta {
+    @media (max-width: 768px) {
+      padding: 0.75rem 0;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.5rem 0;
+    }
+
+    .meta-info {
+      font-size: 14px;
+      gap: 0.25rem;
+
+      @media (max-width: 768px) {
+        font-size: 13px;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 11px;
+        gap: 0.15rem;
+      }
+
+      .meta-item {
+        @media (max-width: 480px) {
+          padding: 0 0.25rem;
+        }
+      }
+
+      .meta-divider {
+        padding: 0 0.5rem;
+
+        @media (max-width: 768px) {
+          padding: 0 0.35rem;
+        }
+
+        @media (max-width: 480px) {
+          padding: 0 0.25rem;
+        }
+      }
+
+      .meta-date {
+        @media (max-width: 480px) {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}
+</style>

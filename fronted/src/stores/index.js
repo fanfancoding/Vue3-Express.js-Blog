@@ -55,13 +55,44 @@ export const useUserStore = defineStore('user', () => {
 
 export const useBlogTypeStore = defineStore('blogType', () => {
   const blogTypeList = ref([])
-  async function getBlogTypeList() {
-    const res = await getBlogCategoryListRequest()
-    const data = handleResponse(res, false) || []
-    blogTypeList.value = data
+  const loading = ref(false)
+
+  // 计算属性：判断数据是否已加载
+  const hasData = computed(() => blogTypeList.value.length > 0)
+
+  // 获取博客分类列表（带缓存）
+  async function getBlogTypeList(forceRefresh = false) {
+    // 如果已有数据且不强制刷新，直接返回
+    if (hasData.value && !forceRefresh) {
+      return blogTypeList.value
+    }
+
+    // 防止重复请求
+    if (loading.value) {
+      return blogTypeList.value
+    }
+
+    try {
+      loading.value = true
+      const res = await getBlogCategoryListRequest()
+      const data = handleResponse(res, false) || []
+      blogTypeList.value = data
+      return data
+    } finally {
+      loading.value = false
+    }
   }
+
+  // 清空数据
+  function clearBlogTypeList() {
+    blogTypeList.value = []
+  }
+
   return {
     blogTypeList,
+    loading,
+    hasData,
     getBlogTypeList,
+    clearBlogTypeList,
   }
 })

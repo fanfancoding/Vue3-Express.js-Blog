@@ -150,7 +150,6 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/blogType", blogTypeRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/comment", commentRouter);
-app.use("/api/comment", commentRouter);
 
 // 404 路由处理
 app.use(function (req, res, next) {

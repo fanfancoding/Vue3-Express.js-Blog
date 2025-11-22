@@ -1,5 +1,6 @@
 import { BlogModel } from "./model/blogModel.js";
 import { BlogTypeModel } from "./model/blogTypeModel.js";
+import { Op } from "sequelize";
 
 // 添加博客
 export async function addBlogDao(blogInfo) {
@@ -18,34 +19,60 @@ export async function addBlogDao(blogInfo) {
 
 // 根据分页获取博客列表
 export async function findBlogByPageDao(pageInfo) {
+  console.log("DAO层：分页查询参数", pageInfo);
+  
+  // 构建查询条件数组
+  const whereConditions = [];
+  
+  // 如果有分类筛选，添加分类条件
   if (pageInfo.categoryId) {
-    // 根据分类信息进行分页查询
-    return await BlogModel.findAndCountAll({
-      include: [
+    whereConditions.push({
+      categoryId: pageInfo.categoryId * 1,
+    });
+  }
+  
+  // 如果有关键字搜索，添加搜索条件
+  if (pageInfo.keyword && pageInfo.keyword.trim()) {
+    whereConditions.push({
+      [Op.or]: [
         {
-          model: BlogTypeModel,
-          as: "blogType",
-          where: {
-            id: pageInfo.categoryId * 1,
+          title: {
+            [Op.like]: `%${pageInfo.keyword.trim()}%`,
+          },
+        },
+        {
+          description: {
+            [Op.like]: `%${pageInfo.keyword.trim()}%`,
           },
         },
       ],
-      offset: (pageInfo.page * 1 - 1) * pageInfo.limit,
-      limit: pageInfo.limit * 1,
-    });
-  } else {
-    // 根据所有博客分页来查询
-    return await BlogModel.findAndCountAll({
-      include: [
-        {
-          model: BlogTypeModel,
-          as: "blogType",
-        },
-      ],
-      offset: (pageInfo.page * 1 - 1) * pageInfo.limit,
-      limit: pageInfo.limit * 1,
     });
   }
+  
+  // 组合所有条件
+  const whereCondition =
+    whereConditions.length > 0 ? { [Op.and]: whereConditions } : {};
+  
+  // 构建查询选项
+  const queryOptions = {
+    where: whereCondition,
+    include: [
+      {
+        model: BlogTypeModel,
+        as: "blogType",
+      },
+    ],
+    offset: (pageInfo.page * 1 - 1) * pageInfo.limit,
+    limit: pageInfo.limit * 1,
+    order: [["createDate", "DESC"]], // 按创建时间降序排列
+  };
+  
+  console.log("DAO层：查询选项", JSON.stringify(queryOptions, null, 2));
+  
+  const result = await BlogModel.findAndCountAll(queryOptions);
+  console.log("DAO层：查询结果数量", result.count);
+  
+  return result;
 }
 
 // 根据id获取博客
