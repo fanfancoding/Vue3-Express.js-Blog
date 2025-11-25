@@ -1,27 +1,41 @@
 <template>
-  <div class="article-detail-container">
-    <div v-if="loading" class="loading-container">
+  <div
+    class="max-w-1200px mx-auto p-20px lt-lg:max-w-100% lt-lg:p-15px lt-md:p-10px lt-sm:p-8px"
+  >
+    <div v-if="loading" class="p-40px lt-md:p-30px lt-sm:p-20px">
       <el-skeleton :rows="10" animated />
     </div>
-    <div v-else-if="article" class="article-content">
+    <div
+      v-else-if="article"
+      class="bg-white rounded-8px p-40px shadow-[0_2px_12px_rgba(0,0,0,0.1)] lt-md:p-24px lt-md:rounded-6px lt-sm:p-16px lt-sm:rounded-4px"
+    >
       <!-- 文章标题 -->
-      <h1 class="article-title">{{ article.title }}</h1>
+      <h1
+        class="text-32px font-bold text-[#303133] mb-20px lh-1.5 lt-md:text-24px lt-md:mb-16px lt-sm:text-20px lt-sm:mb-12px lt-sm:lh-1.4"
+      >
+        {{ article.title }}
+      </h1>
 
       <!-- 文章信息 -->
-      <div class="article-meta">
+      <div
+        class="flex items-center gap-10px text-[#909399] text-14px mb-30px pb-20px border-b-1px border-b-solid border-[#ebeef5] flex-wrap lt-md:text-13px lt-md:gap-8px lt-md:mb-20px lt-md:pb-15px lt-sm:text-11px lt-sm:gap-6px lt-sm:mb-15px lt-sm:pb-12px"
+      >
         <span>作者: Tarzan</span>
-        <span class="divider">|</span>
+        <span class="text-[#dcdfe6] lt-sm:mx-2px">|</span>
         <span>分类: {{ article.blogType?.name }}</span>
-        <span class="divider">|</span>
+        <span class="text-[#dcdfe6] lt-sm:mx-2px">|</span>
         <span>浏览量: {{ article.scanNumber }}</span>
-        <span class="divider">|</span>
+        <span class="text-[#dcdfe6] lt-sm:mx-2px">|</span>
         <span>评论数: {{ article.commentNumber }}</span>
-        <span class="divider">|</span>
+        <span class="text-[#dcdfe6] lt-sm:mx-2px">|</span>
         <span>发布时间: {{ formatDate(article.createDate) }}</span>
       </div>
 
       <!-- 文章描述 -->
-      <div v-if="article.description" class="article-description">
+      <div
+        v-if="article.description"
+        class="text-16px text-[#606266] lh-1.8 mb-30px p-20px bg-[#f5f7fa] rounded-4px lt-md:text-15px lt-md:p-16px lt-md:mb-20px lt-sm:text-14px lt-sm:p-12px lt-sm:mb-16px lt-sm:lh-1.6"
+      >
         {{ article.description }}
       </div>
 
@@ -29,23 +43,40 @@
       <div class="article-body" v-html="article.htmlContent"></div>
 
       <!-- 评论区域 -->
-      <div class="comment-section">
-        <h3 class="comment-title">留个Emoji</h3>
-        <div class="emoji-container">
+      <div
+        class="mt-50px pt-30px border-t-2px border-t-solid border-[#ebeef5] lt-md:mt-35px lt-md:pt-20px lt-sm:mt-25px lt-sm:pt-15px"
+      >
+        <h3
+          class="text-20px font-600 text-[#82411c] mb-20px lt-md:text-18px lt-md:mb-16px lt-sm:text-16px lt-sm:mb-12px"
+        >
+          留个Emoji
+        </h3>
+        <div
+          class="flex gap-20px flex-wrap lt-md:gap-15px lt-md:justify-center lt-sm:gap-10px"
+        >
           <div
             v-for="(comment, index) in comments"
             :key="index"
-            class="emoji-item"
-            :class="{ active: comment.clicked }"
+            class="flex flex-col items-center p-15px-20px border-2px border-solid border-[#ebeef5] rounded-8px cursor-pointer transition-all duration-300 bg-white min-w-80px hover:border-[#409eff] hover:-translate-y-2px hover:shadow-[0_4px_12px_rgba(64,158,255,0.2)] lt-md:p-12px-16px lt-md:min-w-70px lt-md:hover:-translate-y-1px lt-sm:p-10px-12px lt-sm:min-w-60px lt-sm:border-1.5px"
+            :class="{
+              'border-[#409eff] bg-[#ecf5ff] scale-105 lt-md:scale-103':
+                comment.clicked,
+            }"
             @click="handleEmojiClick(comment.emoji)"
           >
-            <div class="emoji">{{ comment.emoji }}</div>
-            <div class="emoji-count">{{ comment.count }}</div>
+            <div
+              class="text-32px mb-8px lt-md:text-28px lt-md:mb-6px lt-sm:text-24px lt-sm:mb-4px"
+            >
+              {{ comment.emoji }}
+            </div>
+            <div class="text-14px text-[#606266] font-500 lt-md:text-13px lt-sm:text-12px">
+              {{ comment.count }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div v-else class="error-container">
+    <div v-else class="p-40px text-center lt-md:p-30px lt-sm:p-20px">
       <el-empty description="文章不存在" />
     </div>
   </div>
@@ -55,7 +86,11 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { getBlogDetailRequest, addCommentRequest, getCommentsByBlogIdRequest } from '@/api/blog'
+import {
+  getBlogDetailRequest,
+  addCommentRequest,
+  getCommentsByBlogIdRequest,
+} from '@/api/blog'
 import { handleResponse } from '@/utils/common'
 import dayjs from 'dayjs'
 
@@ -115,7 +150,10 @@ async function getComments() {
     })
     comments.value = updatedComments
 
-    const totalComments = updatedComments.reduce((sum, current) => sum + current.count, 0)
+    const totalComments = updatedComments.reduce(
+      (sum, current) => sum + current.count,
+      0,
+    )
     if (article.value) {
       article.value.commentNumber = totalComments
     }
@@ -163,130 +201,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.article-detail-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-
-  @media (max-width: 1024px) {
-    max-width: 100%;
-    padding: 15px;
-  }
-
-  @media (max-width: 768px) {
-    padding: 10px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 8px;
-  }
-}
-
-.loading-container {
-  padding: 40px;
-
-  @media (max-width: 768px) {
-    padding: 30px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 20px;
-  }
-}
-
-.article-content {
-  background: white;
-  border-radius: 8px;
-  padding: 40px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-
-  @media (max-width: 768px) {
-    padding: 24px;
-    border-radius: 6px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 16px;
-    border-radius: 4px;
-  }
-}
-
-.article-title {
-  font-size: 32px;
-  font-weight: bold;
-  color: #303133;
-  margin-bottom: 20px;
-  line-height: 1.5;
-
-  @media (max-width: 768px) {
-    font-size: 24px;
-    margin-bottom: 16px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 20px;
-    margin-bottom: 12px;
-    line-height: 1.4;
-  }
-}
-
-.article-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #909399;
-  font-size: 14px;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #ebeef5;
-  flex-wrap: wrap;
-
-  @media (max-width: 768px) {
-    font-size: 13px;
-    gap: 8px;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 11px;
-    gap: 6px;
-    margin-bottom: 15px;
-    padding-bottom: 12px;
-  }
-}
-
-.divider {
-  color: #dcdfe6;
-
-  @media (max-width: 480px) {
-    margin: 0 2px;
-  }
-}
-
-.article-description {
-  font-size: 16px;
-  color: #606266;
-  line-height: 1.8;
-  margin-bottom: 30px;
-  padding: 20px;
-  background: #f5f7fa;
-  border-radius: 4px;
-
-  @media (max-width: 768px) {
-    font-size: 15px;
-    padding: 16px;
-    margin-bottom: 20px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 14px;
-    padding: 12px;
-    margin-bottom: 16px;
-    line-height: 1.6;
-  }
-}
-
 .article-body {
   font-size: 16px;
   line-height: 1.8;
@@ -417,140 +331,6 @@ onMounted(() => {
 
   @media (max-width: 480px) {
     margin: 10px 0;
-  }
-}
-
-.comment-section {
-  margin-top: 50px;
-  padding-top: 30px;
-  border-top: 2px solid #ebeef5;
-
-  @media (max-width: 768px) {
-    margin-top: 35px;
-    padding-top: 20px;
-  }
-
-  @media (max-width: 480px) {
-    margin-top: 25px;
-    padding-top: 15px;
-  }
-}
-
-.comment-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #82411c;
-  margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-    margin-bottom: 16px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-}
-
-.emoji-container {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-
-  @media (max-width: 768px) {
-    gap: 15px;
-    justify-content: center;
-  }
-
-  @media (max-width: 480px) {
-    gap: 10px;
-  }
-}
-
-.emoji-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px 20px;
-  border: 2px solid #ebeef5;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
-  background: white;
-  min-width: 80px;
-
-  @media (max-width: 768px) {
-    padding: 12px 16px;
-    min-width: 70px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 10px 12px;
-    min-width: 60px;
-    border-width: 1.5px;
-  }
-}
-
-.emoji-item:hover {
-  border-color: #409eff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.2);
-
-  @media (max-width: 768px) {
-    transform: translateY(-1px);
-  }
-}
-
-.emoji-item.active {
-  border-color: #409eff;
-  background: #ecf5ff;
-  transform: scale(1.05);
-
-  @media (max-width: 768px) {
-    transform: scale(1.03);
-  }
-}
-
-.emoji {
-  font-size: 32px;
-  margin-bottom: 8px;
-
-  @media (max-width: 768px) {
-    font-size: 28px;
-    margin-bottom: 6px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 24px;
-    margin-bottom: 4px;
-  }
-}
-
-.emoji-count {
-  font-size: 14px;
-  color: #606266;
-  font-weight: 500;
-
-  @media (max-width: 768px) {
-    font-size: 13px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 12px;
-  }
-}
-
-.error-container {
-  padding: 40px;
-  text-align: center;
-
-  @media (max-width: 768px) {
-    padding: 30px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 20px;
   }
 }
 </style>
