@@ -7,7 +7,7 @@ import { responseTypeMap } from '@/enum/index.js'
 import { ElMessage } from 'element-plus'
 
 const request = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL || '/api',
   timeout: 60000, // 增加到60秒以支持长文章上传
   withCredentials: true, // 允许携带cookie，支持session
 })

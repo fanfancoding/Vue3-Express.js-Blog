@@ -41,6 +41,10 @@ const storage = multer.diskStorage({
   },
   // 处理上传到服务器的文件名
   filename: function (req, file, cb) {
+    // 解决中文名乱码问题
+    file.originalname = Buffer.from(file.originalname, "latin1").toString(
+      "utf8"
+    );
     // 获取文件名
     const baseName = path.basename(
       file.originalname,
@@ -135,7 +139,7 @@ export function handleTOC(info) {
     }
 
     let res = toc(info.markdownContent || "").json;
-    
+
     // 如果 TOC 解析失败，返回空数组
     if (!res || !Array.isArray(res)) {
       info.toc = [];
@@ -143,15 +147,15 @@ export function handleTOC(info) {
     }
 
     info.toc = transfer(res);
-    
+
     // 保存 markdownContent（虽然会被删除，但调用者会恢复）
     const markdownContent = info.markdownContent;
     delete info.markdownContent;
-    
+
     // 为各个级别的标题添加id属性（只替换第一个匹配的）
     for (const item of res) {
       if (!item || !item.lvl || !item.slug) continue;
-      
+
       try {
         switch (item.lvl) {
           case 1:
@@ -197,7 +201,7 @@ export function handleTOC(info) {
         // 继续处理下一个
       }
     }
-    
+
     return info;
   } catch (error) {
     console.error("handleTOC 函数出错:", error);
