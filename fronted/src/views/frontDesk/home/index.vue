@@ -34,7 +34,7 @@
                   <div class="mt-2 stat-label">随笔杂文</div>
                 </div>
                 <div class="stat-item">
-                  <el-tag effect="dark">20天</el-tag>
+                  <el-tag effect="dark">{{ runningDays }}天</el-tag>
                   <div class="mt-2 stat-label">网站运行</div>
                 </div>
               </div>
@@ -77,6 +77,14 @@ const essayArticleCount = computed(() => {
   return blogTypeStore.blogTypeList
     .filter((item) => item.name === '随笔' || item.name === '生活')
     .reduce((sum, item) => sum + (item.articleCount || 0), 0)
+})
+
+const runningDays = computed(() => {
+  const startDate = new Date('2025-11-25')
+  const today = new Date()
+  const diffTime = Math.abs(today - startDate)
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  return diffDays
 })
 defineOptions({
   name: 'HomePage',

@@ -185,7 +185,7 @@ const blogTypeStore = useBlogTypeStore()
 
 // 计算网站运行天数（从 2025-11-01 开始）
 const runningDays = computed(() => {
-  const startDate = new Date('2025-11-01')
+  const startDate = new Date('2025-11-25')
   const today = new Date()
   const diffTime = Math.abs(today - startDate)
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
