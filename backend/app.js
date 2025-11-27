@@ -96,7 +96,9 @@ app.use(logger("dev"));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 app.use(cookieParser());
+// 静态文件服务 - 支持根路径和/api路径访问
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/api", express.static(path.join(__dirname, "public")));
 
 // 验证token中间件
 const jwtMiddleware = expressjwt({
@@ -136,6 +138,11 @@ const jwtMiddleware = expressjwt({
     {
       url: "/api/comment",
       methods: ["POST"],
+    },
+    // 静态资源路径不需要token验证
+    {
+      url: /^\/static\//,
+      methods: ["GET"],
     },
   ],
 });

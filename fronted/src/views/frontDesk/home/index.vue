@@ -5,8 +5,8 @@
       <h1 class="main-title">Welcome To Tarzan's Blog</h1>
     </div>
 
-    <div class="w-full">
-      <el-row :gutter="20" class="w-full">
+    <div class="w-full flex justify-center">
+      <el-row :gutter="20" class="w-full flex justify-center">
         <el-col :xs="24" :sm="24" :md="24" :lg="19" :xl="19">
           <ListItem :item="blogList" />
         </el-col>
