@@ -46,7 +46,7 @@ app.use(
     resave: false, // 不强制保存未修改的session
     saveUninitialized: false, // 不保存未初始化的session
     cookie: {
-      secure: false, // 在开发环境中设为false，生产环境中应设为true（需要HTTPS）
+      secure: process.env.NODE_ENV === "production", // 生产环境使用HTTPS时设为true
       httpOnly: false, // 允许客户端JavaScript访问cookie（为了兼容性）
       maxAge: 24 * 60 * 60 * 1000, // 24小时过期
       sameSite: "lax", // 允许跨站请求携带cookie
@@ -66,8 +66,13 @@ app.set("view engine", "jade");
 
 // CORS 配置
 app.use((req, res, next) => {
-  // 支持多个前端端口
-  const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+  // 支持多个前端端口和生产环境域名
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://fanfancoding.asia",
+    "https://www.fanfancoding.asia",
+  ];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.header("Access-Control-Allow-Origin", origin);
@@ -96,7 +101,9 @@ app.use(logger("dev"));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 app.use(cookieParser());
+// 静态文件服务 - 支持根路径和/api路径访问
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/api", express.static(path.join(__dirname, "public")));
 
 // 验证token中间件
 const jwtMiddleware = expressjwt({
@@ -136,6 +143,11 @@ const jwtMiddleware = expressjwt({
     {
       url: "/api/comment",
       methods: ["POST"],
+    },
+    // 静态资源路径不需要token验证
+    {
+      url: /^\/static\//,
+      methods: ["GET"],
     },
   ],
 });

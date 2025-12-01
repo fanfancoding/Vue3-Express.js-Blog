@@ -143,7 +143,7 @@ const submitLoading = ref(false)
 const categoryOptions = ref([])
 
 // 上传配置
-const uploadUrl = ref(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/upload`)
+const uploadUrl = ref(`${import.meta.env.VITE_BASE_URL || 'http://localhost:3001/api'}upload`)
 const uploadHeaders = computed(() => {
   const token = localStorage.getItem('token')
   return {
@@ -254,8 +254,9 @@ const handleUploadImg = async (files, callback) => {
 
       const res = await uploadImageRequest(formData)
       if (res.code === 200 && res.data) {
-        // 返回图片 URL
-        const imageUrl = `${import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:3001'}/${res.data}`
+        // 临时方案：通过API代理访问静态资源（已在后端JWT白名单中添加）
+        const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001/api'
+        const imageUrl = `${baseUrl}/${res.data}`
         return imageUrl
       }
       return ''
@@ -305,8 +306,9 @@ const getImageUrl = (relativePath) => {
   if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
     return relativePath
   }
-  // 否则转换为完整URL
-  const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:3001'
+  // 临时方案：通过API代理访问静态资源（已在后端JWT白名单中添加）
+  const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001/api'
+  console.log(`${baseUrl}/${relativePath}`, 'baseUrl')
   return `${baseUrl}/${relativePath}`
 }
 

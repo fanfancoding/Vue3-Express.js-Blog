@@ -52,9 +52,9 @@
             </div>
           </div>
         </el-col>
-        <el-col :xs="4" :sm="3" :md="2" :lg="2" class="flex items-center justify-end cat-wrapper">
+        <!-- <el-col :xs="4" :sm="3" :md="2" :lg="2" class="flex items-center justify-end cat-wrapper">
           <img :src="cat" alt="cat" class="cat-img" />
-        </el-col>
+        </el-col> -->
       </el-row>
     </div>
 
@@ -76,7 +76,7 @@
 import { onMounted, ref } from 'vue'
 import { ElLink } from 'element-plus'
 import { HomeFilled, Reading, Collection } from '@element-plus/icons-vue'
-import cat from '@/assets/cat-gun.gif'
+// import cat from '@/assets/cat-gun.gif'
 import logo from '@/assets/logo.png'
 import { useRouter } from 'vue-router'
 import { useBlogTypeStore } from '@/stores'
