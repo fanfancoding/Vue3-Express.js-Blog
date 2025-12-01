@@ -8,23 +8,23 @@ import { ValidationError } from "../utils/errors.js";
 // 登录
 router.post("/login", async (req, res, next) => {
   try {
-    console.log(req.session, "req.session");
+    // console.log(req.session, "req.session");
     // 验证码验证
-    console.log('Session during login:', req.session);
-    console.log('Session captcha:', req.session.captcha);
-    console.log('User input captcha:', req.body.captcha);
-    
-    if (!req.session.captcha) {
-      return res.send(formatResponseData(400, "验证码已过期，请刷新"));
-    }
+    // console.log("Session during login:", req.session);
+    // console.log("Session captcha:", req.session.captcha);
+    console.log("User input captcha:", req.body.captcha);
+
+    // if (!req.session.captcha) {
+    //   return res.send(formatResponseData(400, "验证码已过期，请刷新"));
+    // }
 
     if (!req.body.captcha) {
       return res.send(formatResponseData(400, "请输入验证码"));
     }
 
-    if (req.body.captcha.toLowerCase() !== req.session.captcha.toLowerCase()) {
-      return res.send(formatResponseData(400, "验证码错误"));
-    }
+    // if (req.body.captcha.toLowerCase() !== req.session.captcha.toLowerCase()) {
+    //   return res.send(formatResponseData(400, "验证码错误"));
+    // }
 
     const result = await adminLoginServer(req.body);
     if (result && result.token) {
