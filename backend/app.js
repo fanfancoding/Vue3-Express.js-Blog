@@ -110,46 +110,36 @@ const jwtMiddleware = expressjwt({
   secret: md5(process.env.JWT_SECRET), // md5加密后的密钥
   algorithms: ["HS256"], // 加密算法
   requestProperty: "auth", // 验证通过后 将token信息挂载到req.auth上
-}).unless({
-  path: [
-    {
-      url: "/api/admin/login",
-      methods: ["POST"],
-    },
-    {
-      url: "/api/captcha",
-      methods: ["GET"],
-    },
-    {
-      url: "/api/blog",
-      methods: ["GET"],
-    },
-    {
-      url: /^\/api\/blog\/\d+$/,
-      methods: ["GET"],
-    },
-    {
-      url: "/api/blogType",
-      methods: ["GET"],
-    },
-    {
-      url: "/api/banner",
-      methods: ["GET"],
-    },
-    {
-      url: /^\/api\/comment\/blog\/\d+$/,
-      methods: ["GET"],
-    },
-    {
-      url: "/api/comment",
-      methods: ["POST"],
-    },
-    // 静态资源路径不需要token验证
-    {
-      url: /^\/static\//,
-      methods: ["GET"],
-    },
-  ],
+}).unless(function (req) {
+  // 定义不需要token验证的路径
+  const publicPaths = [
+    { path: "/api/admin/login", method: "POST" },
+    { path: "/api/captcha", method: "GET" },
+    { path: "/api/blog", method: "GET" },
+    { path: "/api/blogType", method: "GET" },
+    { path: "/api/banner", method: "GET" },
+    { path: "/api/comment", method: "POST" },
+  ];
+
+  // 检查静态资源路径
+  if (req.path.startsWith("/static/") && req.method === "GET") {
+    return true;
+  }
+
+  // 检查博客详情路径 (匹配 /api/blog/数字)
+  if (/^\/api\/blog\/\d+$/.test(req.path) && req.method === "GET") {
+    return true;
+  }
+
+  // 检查评论路径 (匹配 /api/comment/blog/数字)
+  if (/^\/api\/comment\/blog\/\d+$/.test(req.path) && req.method === "GET") {
+    return true;
+  }
+
+  // 检查其他公共路径
+  return publicPaths.some(
+    (route) => route.path === req.path && route.method === req.method
+  );
 });
 
 app.use(jwtMiddleware);
