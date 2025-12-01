@@ -18,10 +18,26 @@ let loadingInstance = null
 request.interceptors.request.use(
   (config) => {
     const userStore = useUserStore()
-    // 设置 Authorization 请求头，格式为 Bearer <token>
-    if (userStore.token) {
+
+    // 定义需要token的API路径
+    const requiresAuth = [
+      '/admin', // 管理员接口
+      '/blog', // 博客管理接口 (POST, PUT, DELETE需要token)
+      '/blogType', // 分类管理接口 (POST, PUT, DELETE需要token)
+      '/upload', // 文件上传接口
+      '/comment/all', // 评论管理接口
+    ]
+
+    // 检查当前请求是否需要认证
+    const requiresToken =
+      requiresAuth.some((path) => config.url.includes(path)) &&
+      ['POST', 'PUT', 'DELETE'].includes(config.method?.toUpperCase())
+
+    // 只有在需要认证的接口才发送token
+    if (requiresToken && userStore.token) {
       config.headers['Authorization'] = `Bearer ${userStore.token}`
     }
+
     config.headers['Content-Type'] = responseTypeMap.get(config.responseType || 'json')
 
     // 开启loading
