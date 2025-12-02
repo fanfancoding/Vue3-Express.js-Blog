@@ -39,6 +39,11 @@ export default defineConfig({
       'bg-gradient-to-r from-primary-500 to-purple-600 bg-clip-text text-transparent',
   },
   rules: [
+    // 修复行高规则 - lh-数字 应该生成 line-height: 数字（无单位）
+    [
+      /^lh-(\d+\.?\d*)$/,
+      ([, d]) => ({ 'line-height': d }),
+    ],
     [
       /^animate-fadeInUp$/,
       () => ({
