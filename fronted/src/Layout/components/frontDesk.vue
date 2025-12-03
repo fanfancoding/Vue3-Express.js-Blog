@@ -6,7 +6,7 @@
     >
       <el-row :gutter="20" class="w-full header-row">
         <el-col :xs="4" :sm="3" :md="2" :lg="2">
-          <img :src="logo" alt="logo" class="logo-img" />
+          <!-- <img :src="logo" alt="logo" class="logo-img" /> -->
         </el-col>
         <el-col :xs="16" :sm="18" :md="20" :lg="20">
           <div class="nav-menu flex justify-center items-center h-full">
@@ -77,7 +77,7 @@ import { onMounted, ref } from 'vue'
 import { ElLink } from 'element-plus'
 import { HomeFilled, Reading, Collection } from '@element-plus/icons-vue'
 // import cat from '@/assets/cat-gun.gif'
-import logo from '@/assets/logo.png'
+// import logo from '@/assets/logo.png'
 import { useRouter } from 'vue-router'
 import { useBlogTypeStore } from '@/stores'
 const blogTypeStore = useBlogTypeStore()

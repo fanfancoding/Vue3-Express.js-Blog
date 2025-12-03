@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="max-w-1200px mx-auto p-20px lt-lg:max-w-100% lt-lg:p-15px lt-md:p-10px lt-sm:p-8px"
-  >
+  <div class="max-w-1200px mx-auto p-20px lt-lg:max-w-100% lt-lg:p-15px lt-md:p-10px lt-sm:p-8px">
     <div v-if="loading" class="p-40px lt-md:p-30px lt-sm:p-20px">
       <el-skeleton :rows="10" animated />
     </div>
@@ -34,7 +32,7 @@
       <!-- 文章描述 -->
       <div
         v-if="article.description"
-        class="text-16px text-[#606266] lh-1.8 mb-30px p-20px bg-[#f5f7fa] rounded-4px lt-md:text-15px lt-md:p-16px lt-md:mb-20px lt-sm:text-14px lt-sm:p-12px lt-sm:mb-16px lt-sm:lh-1.6"
+        class="text-16px text-[#606266] lh-[30px] mb-30px p-20px bg-[#f5f7fa] rounded-4px lt-md:text-15px lt-md:p-16px lt-md:mb-20px lt-sm:text-14px lt-sm:p-12px lt-sm:mb-16px lt-sm:lh-1.6"
       >
         {{ article.description }}
       </div>
@@ -51,22 +49,17 @@
         >
           留个Emoji
         </h3>
-        <div
-          class="flex gap-20px flex-wrap lt-md:gap-15px lt-md:justify-center lt-sm:gap-10px"
-        >
+        <div class="flex gap-20px flex-wrap lt-md:gap-15px lt-md:justify-center lt-sm:gap-10px">
           <div
             v-for="(comment, index) in comments"
             :key="index"
             class="flex flex-col items-center p-15px-20px border-2px border-solid border-[#ebeef5] rounded-8px cursor-pointer transition-all duration-300 bg-white min-w-80px hover:border-[#409eff] hover:-translate-y-2px hover:shadow-[0_4px_12px_rgba(64,158,255,0.2)] lt-md:p-12px-16px lt-md:min-w-70px lt-md:hover:-translate-y-1px lt-sm:p-10px-12px lt-sm:min-w-60px lt-sm:border-1.5px"
             :class="{
-              'border-[#409eff] bg-[#ecf5ff] scale-105 lt-md:scale-103':
-                comment.clicked,
+              'border-[#409eff] bg-[#ecf5ff] scale-105 lt-md:scale-103': comment.clicked,
             }"
             @click="handleEmojiClick(comment.emoji)"
           >
-            <div
-              class="text-32px mb-8px lt-md:text-28px lt-md:mb-6px lt-sm:text-24px lt-sm:mb-4px"
-            >
+            <div class="text-32px mb-8px lt-md:text-28px lt-md:mb-6px lt-sm:text-24px lt-sm:mb-4px">
               {{ comment.emoji }}
             </div>
             <div class="text-14px text-[#606266] font-500 lt-md:text-13px lt-sm:text-12px">
@@ -86,11 +79,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import {
-  getBlogDetailRequest,
-  addCommentRequest,
-  getCommentsByBlogIdRequest,
-} from '@/api/blog'
+import { getBlogDetailRequest, addCommentRequest, getCommentsByBlogIdRequest } from '@/api/blog'
 import { handleResponse } from '@/utils/common'
 import dayjs from 'dayjs'
 
@@ -150,10 +139,7 @@ async function getComments() {
     })
     comments.value = updatedComments
 
-    const totalComments = updatedComments.reduce(
-      (sum, current) => sum + current.count,
-      0,
-    )
+    const totalComments = updatedComments.reduce((sum, current) => sum + current.count, 0)
     if (article.value) {
       article.value.commentNumber = totalComments
     }
