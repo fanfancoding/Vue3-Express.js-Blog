@@ -31,6 +31,7 @@ import uploadRouter from "./routes/upload.js";
 import blogTypeRouter from "./routes/blogType.js";
 import blogRouter from "./routes/blog.js";
 import commentRouter from "./routes/comment.js";
+import messageBoardRouter from "./routes/messageBoard.js";
 
 // 在 ES 模块中获取 __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -110,6 +111,21 @@ const jwtMiddleware = expressjwt({
   secret: md5(process.env.JWT_SECRET), // md5加密后的密钥
   algorithms: ["HS256"], // 加密算法
   requestProperty: "auth", // 验证通过后 将token信息挂载到req.auth上
+  getToken: function (req) {
+    // 优先从 Authorization header 中获取token
+    if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
+      return req.headers.authorization.split(" ")[1];
+    }
+    // 如果header中没有，则从cookie中获取 Admin-Token
+    if (req.cookies && req.cookies["Admin-Token"]) {
+      return req.cookies["Admin-Token"];
+    }
+    // 如果cookie中也没有，尝试从请求头中获取（某些情况下cookie可能通过header传递）
+    if (req.headers["admin-token"]) {
+      return req.headers["admin-token"];
+    }
+    return null;
+  },
 }).unless(function (req) {
   // 定义不需要token验证的路径
   const publicPaths = [
@@ -119,6 +135,8 @@ const jwtMiddleware = expressjwt({
     { path: "/api/blogType", method: "GET" },
     { path: "/api/banner", method: "GET" },
     { path: "/api/comment", method: "POST" },
+    { path: "/api/messageBoard", method: "POST" },
+    { path: "/api/messageBoard/list", method: "GET" },
   ];
 
   // 检查静态资源路径
@@ -152,6 +170,7 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/blogType", blogTypeRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/comment", commentRouter);
+app.use("/api/messageBoard", messageBoardRouter);
 
 // 404 路由处理
 app.use(function (req, res, next) {

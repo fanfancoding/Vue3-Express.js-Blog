@@ -45,6 +45,9 @@
                 <el-link @click="handleRoutePush('AboutSitePage')" class="dropdown-item">
                   <span class="text-[16px]">关于网站</span>
                 </el-link>
+                <el-link @click="handleRoutePush('MessageBoardPage')" class="dropdown-item">
+                  <span class="text-[16px]">留言板</span>
+                </el-link>
               </div>
             </div>
           </div>

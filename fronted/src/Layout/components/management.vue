@@ -25,6 +25,18 @@
               </el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
+          <el-menu-item index="/management/message-board">
+            <el-icon><ChatLineRound /></el-icon>
+            <span>留言板管理</span>
+          </el-menu-item>
+          <el-menu-item index="/management/user">
+            <el-icon><User /></el-icon>
+            <span>用户管理</span>
+          </el-menu-item>
+          <el-menu-item index="/management/settings">
+            <el-icon><Setting /></el-icon>
+            <span>系统设置</span>
+          </el-menu-item>
         </el-menu>
       </el-scrollbar>
     </el-aside>
@@ -104,7 +116,7 @@
 <script setup>
 import { defineOptions, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Document, List, Folder, Setting } from '@element-plus/icons-vue'
+import { Document, List, Folder, Setting, ChatLineRound, User } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { updateAdminInfoRequest } from '@/api/manage'
 import { useUserStore } from '@/stores'

@@ -5,6 +5,7 @@ import { bannerModel } from "./model/bannerModel.js";
 import { BlogTypeModel } from "./model/blogTypeModel.js";
 import { BlogModel } from "./model/blogModel.js";
 import { CommentModel } from "./model/commentModel.js";
+import { MessageBoardModel } from "./model/messageBoardModel.js";
 
 import md5 from "md5";
 

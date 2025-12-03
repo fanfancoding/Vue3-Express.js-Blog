@@ -48,6 +48,11 @@ const router = createRouter({
           name: 'settingsPage',
           component: () => import('@/views/management/settings/index.vue'),
         },
+        {
+          path: 'message-board',
+          name: 'messageBoardPage',
+          component: () => import('@/views/management/messageBoard/index.vue'),
+        },
       ],
     },
     {
@@ -84,6 +89,11 @@ const router = createRouter({
           path: 'about/site',
           name: 'AboutSitePage',
           component: () => import('@/views/frontDesk/about/about-site.vue'),
+        },
+        {
+          path: 'about/message-board',
+          name: 'MessageBoardPage',
+          component: () => import('@/views/frontDesk/about/message-board.vue'),
         },
       ],
     },

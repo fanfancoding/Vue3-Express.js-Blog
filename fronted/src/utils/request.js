@@ -29,9 +29,29 @@ request.interceptors.request.use(
     ]
 
     // 检查当前请求是否需要认证
-    const requiresToken =
-      requiresAuth.some((path) => config.url.includes(path)) &&
-      ['POST', 'PUT', 'DELETE'].includes(config.method?.toUpperCase())
+    const method = config.method?.toUpperCase()
+    const url = config.url
+
+    // 管理端接口（包含 /admin 的路径）所有方法都需要token
+    const isAdminPath = url.includes('/admin')
+
+    // 留言板接口的特殊处理
+    const isMessageBoardPath = url.includes('/messageBoard')
+    // 公开的留言板接口（不需要token）
+    const isMessageBoardPublic =
+      (url === '/messageBoard' && method === 'POST') || // 创建留言
+      (url === '/messageBoard/list' && method === 'GET') // 获取留言列表
+
+    // 留言板的管理操作（需要token）
+    const isMessageBoardManagement =
+      isMessageBoardPath && !isMessageBoardPublic && ['PUT', 'DELETE'].includes(method) // 回复、删除等操作
+
+    const requiresToken = isAdminPath
+      ? true // 管理端接口所有方法都需要token
+      : isMessageBoardManagement
+        ? true // 留言板的管理操作需要token
+        : requiresAuth.some((path) => url.includes(path)) &&
+          ['POST', 'PUT', 'DELETE'].includes(method) // 其他接口的POST/PUT/DELETE需要token
 
     // 只有在需要认证的接口才发送token
     if (requiresToken && userStore.token) {
