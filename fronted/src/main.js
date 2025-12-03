@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import 'virtual:uno.css'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import {translateJsVueUseModel} from './utils/translate' // 多语言切换, 导入translate插件
 import App from './App.vue'
 import router from './router'
 
@@ -13,5 +14,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app.use(createPinia())
 app.use(router)
-
+app.use(translateJsVueUseModel)
 app.mount('#app')

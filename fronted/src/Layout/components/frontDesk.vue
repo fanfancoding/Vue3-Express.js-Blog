@@ -5,10 +5,7 @@
       class="header-wrapper flex items-center justify-center bg-[#fff] text-[#82411c] flex-shrink-0"
     >
       <el-row :gutter="20" class="w-full header-row">
-        <el-col :xs="4" :sm="3" :md="2" :lg="2">
-          <!-- <img :src="logo" alt="logo" class="logo-img" /> -->
-        </el-col>
-        <el-col :xs="16" :sm="18" :md="20" :lg="20">
+        <el-col :xs="18" :sm="18" :md="20" :lg="20">
           <div class="nav-menu flex justify-center items-center h-full">
             <el-link href="/blog/home" class="nav-link">
               <div class="flex items-center gap-1 whitespace-nowrap">
@@ -52,9 +49,9 @@
             </div>
           </div>
         </el-col>
-        <!-- <el-col :xs="4" :sm="3" :md="2" :lg="2" class="flex items-center justify-end cat-wrapper">
-          <img :src="cat" alt="cat" class="cat-img" />
-        </el-col> -->
+        <el-col :xs="2" :sm="2" :md="2" :lg="2" class="flex items-center justify-end cat-wrapper">
+          <TranslateComponent />
+        </el-col>
       </el-row>
     </div>
 
@@ -78,6 +75,7 @@ import { ElLink } from 'element-plus'
 import { HomeFilled, Reading, Collection } from '@element-plus/icons-vue'
 // import cat from '@/assets/cat-gun.gif'
 // import logo from '@/assets/logo.png'
+import TranslateComponent from '@/components/translate/index.vue'
 import { useRouter } from 'vue-router'
 import { useBlogTypeStore } from '@/stores'
 const blogTypeStore = useBlogTypeStore()
@@ -163,8 +161,6 @@ onMounted(async () => {
   }
 
   .cat-wrapper {
-    margin-top: 0.6rem;
-
     @media (max-width: 768px) {
       margin-top: 0.2rem;
       justify-content: center !important;
