@@ -19,9 +19,9 @@ echo "📦 步骤1: 本地打包更新文件..."
 echo "构建前端..."
 ./build-frontend.sh
 
-# 打包更新文件
+# 打包更新文件（排除node_modules）
 echo "打包文件..."
-tar -czf $UPDATE_PACKAGE \
+tar --exclude='*/node_modules' --exclude='*/.git' --exclude='*/dist' -czf $UPDATE_PACKAGE \
 backend/ \
 fronted/ \
 deploy.sh \
@@ -29,7 +29,6 @@ build-frontend.sh \
 deploy-backend.sh \
 setup-ssl.sh \
 test-ssl.sh \
-nginx-site.conf \
 nginx-site.conf
 
 echo "✅ 本地打包完成: $UPDATE_PACKAGE"
@@ -47,6 +46,9 @@ cp /etc/nginx/conf.d/blog.conf /root/nginx.conf.backup 2>/dev/null || true
 
 echo "停止服务..."
 sudo systemctl stop blog-backend 2>/dev/null || true
+
+echo "清理旧的node_modules（避免版本冲突）..."
+rm -rf backend/node_modules fronted/node_modules 2>/dev/null || true
 
 echo "解压更新包..."
 tar -xzf $UPDATE_PACKAGE

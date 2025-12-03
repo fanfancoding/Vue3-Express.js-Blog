@@ -11,15 +11,17 @@ echo "NPM版本: $(npm --version)"
 # 进入前端目录
 cd fronted
 
-# 清理之前的构建文件
-echo "清理之前的构建文件..."
+# 清理之前的构建文件和依赖
+echo "清理之前的构建文件和依赖..."
 rm -rf node_modules/.vite dist
 
-# 安装依赖（如果还没有安装）
-if [ ! -d "node_modules" ]; then
-    echo "安装前端依赖..."
-    npm install
-fi
+# 清理并重新安装依赖（修复esbuild版本问题）
+echo "清理旧的node_modules..."
+rm -rf node_modules package-lock.json pnpm-lock.yaml
+
+# 重新安装依赖
+echo "安装前端依赖..."
+npm install
 
 # 使用增加的内存限制构建
 echo "构建前端生产版本（增加内存限制）..."
