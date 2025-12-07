@@ -161,13 +161,22 @@ ul {
     cursor: pointer;
     transition:
       background 0.2s ease,
-      transform 0.2s ease;
+      transform 0.2s ease,
+      color 0.2s ease;
     color: inherit;
 
     &:hover {
       background: var(--hover-bg);
-      color: #fff;
       transform: translateX(4px);
+
+      .title,
+      .meta {
+        color: #fff;
+      }
+
+      .date {
+        color: #fff;
+      }
     }
 
     .date {
