@@ -2,12 +2,16 @@
   <div class="front-desk-container h-screen flex flex-col overflow-hidden">
     <!-- header -->
     <div
-      class="header-wrapper flex items-center justify-center bg-[#fff] text-[#82411c] flex-shrink-0"
+      class="header-wrapper flex items-center justify-center flex-shrink-0"
+      :style="{
+        backgroundColor: 'var(--bg-secondary)',
+        color: 'var(--text-primary)',
+      }"
     >
       <el-row :gutter="20" class="w-full header-row">
-        <el-col :xs="18" :sm="18" :md="20" :lg="20">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24">
           <div class="nav-menu flex justify-center items-center h-full">
-            <el-link href="/blog/home" class="nav-link">
+            <el-link @click="handleRoutePush('blogPage')" class="nav-link">
               <div class="flex items-center gap-1 whitespace-nowrap">
                 <el-icon><HomeFilled /></el-icon>
                 <span class="nav-text">首页</span>
@@ -27,7 +31,10 @@
                   @click="handleCategoryClick(item.value)"
                   class="dropdown-item"
                 >
-                  <span class="text-[16px]">{{ item.label }}</span>
+                  <span class="nav-text">{{ item.label }}</span>
+                </el-link>
+                <el-link @click="handleRoutePush('ArticleArchivePage')" class="dropdown-item">
+                  <span class="nav-text">文归档</span>
                 </el-link>
               </div>
             </div>
@@ -40,31 +47,41 @@
               </el-link>
               <div class="dropdown-menu">
                 <el-link @click="handleRoutePush('AboutMePage')" class="dropdown-item">
-                  <span class="text-[16px]">关于我</span>
+                  <span class="nav-text">关于我</span>
                 </el-link>
                 <el-link @click="handleRoutePush('AboutSitePage')" class="dropdown-item">
-                  <span class="text-[16px]">关于网站</span>
+                  <span class="nav-text">关于网站</span>
                 </el-link>
                 <el-link @click="handleRoutePush('MessageBoardPage')" class="dropdown-item">
-                  <span class="text-[16px]">留言板</span>
+                  <span class="nav-text">留言板</span>
                 </el-link>
               </div>
             </div>
           </div>
         </el-col>
-        <el-col :xs="2" :sm="2" :md="2" :lg="2" class="flex items-center justify-end cat-wrapper">
-          <TranslateComponent />
-        </el-col>
       </el-row>
+      <div class="translate-float">
+        <ThemeToggleComponent class="px-4" />
+        <TranslateComponent />
+      </div>
     </div>
 
     <!-- container -->
-    <div class="flex-1 bg-[#eef0f3] overflow-y-auto content-wrapper min-h-0">
+    <div
+      class="flex-1 overflow-y-auto content-wrapper min-h-0"
+      :style="{ backgroundColor: 'var(--bg-primary)' }"
+    >
       <router-view />
     </div>
 
     <!-- footer -->
-    <div class="footer-wrapper flex-shrink-0 bg-[#eef0f3] text-[#82411c] footer-container">
+    <div
+      class="footer-wrapper flex-shrink-0 footer-container"
+      :style="{
+        backgroundColor: 'var(--footer-bg)',
+        color: 'var(--text-primary)',
+      }"
+    >
       <div class="flex items-center justify-center h-full px-4">
         <span class="footer-text text-center">Copyright © 2025 Blog. All rights reserved.</span>
       </div>
@@ -79,6 +96,7 @@ import { HomeFilled, Reading, Collection } from '@element-plus/icons-vue'
 // import cat from '@/assets/cat-gun.gif'
 // import logo from '@/assets/logo.png'
 import TranslateComponent from '@/components/translate/index.vue'
+import ThemeToggleComponent from '@/components/theme-toggle/index.vue'
 import { useRouter } from 'vue-router'
 import { useBlogTypeStore } from '@/stores'
 const blogTypeStore = useBlogTypeStore()
@@ -111,10 +129,11 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .front-desk-container {
-  background-color: #eef0f3;
+  background-color: var(--bg-primary);
 
   // 响应式头部
   .header-wrapper {
+    position: relative;
     padding: 0.5rem 1rem;
 
     @media (max-width: 768px) {
@@ -159,7 +178,8 @@ onMounted(async () => {
     font-size: 16px;
 
     @media (max-width: 768px) {
-      display: none;
+      // display: none;
+      font-size: 10px;
     }
   }
 
@@ -224,7 +244,7 @@ onMounted(async () => {
   }
 
   :deep(.el-link) {
-    --el-link-text-color: #82411c;
+    --el-link-text-color: var(--text-primary);
     --el-link-hover-text-color: #fff;
     padding: 6px 12px;
     font-weight: 400;
@@ -234,13 +254,45 @@ onMounted(async () => {
     }
 
     &:hover {
-      background-color: #82411c;
+      background-color: var(--hover-bg);
       border-radius: 8px;
     }
   }
 
   .footer-container {
-    border-top: 1px solid #d3d3d3;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .translate-float {
+    position: absolute;
+    top: 50%;
+    right: 3rem;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 10;
+
+    @media (max-width: 768px) {
+      top: 0.5rem;
+      right: 0.75rem;
+      transform: none;
+      gap: 0.5rem;
+
+      // 移动端仅保留暗黑模式开关，隐藏国际化入口
+      :deep(.LanguageSelect) {
+        display: none !important;
+      }
+    }
+  }
+
+  // 移动端下拉菜单字体缩小
+  .dropdown-menu {
+    .dropdown-item {
+      @media (max-width: 768px) {
+        font-size: 14px;
+      }
+    }
   }
 
   .dropdown-container {
@@ -262,7 +314,7 @@ onMounted(async () => {
 
   .dropdown-menu {
     position: absolute;
-    background-color: #ebeef1;
+    background-color: var(--dropdown-bg);
     top: 100%;
     left: 0;
     margin-top: 8px;
@@ -298,7 +350,7 @@ onMounted(async () => {
       }
 
       &:hover {
-        background-color: #82411c;
+        background-color: var(--hover-bg);
       }
     }
   }

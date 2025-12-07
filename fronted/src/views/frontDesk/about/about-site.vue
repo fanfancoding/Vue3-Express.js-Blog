@@ -1,32 +1,35 @@
 <template>
   <div class="about-site-container">
-    <div class="content-wrapper bg-white rounded-xl shadow-md p-10 my-10">
-      <h1 class="text-4xl font-bold mb-8 text-[#82411c] flex items-center gap-3">
-        <el-icon :size="40"><Monitor /></el-icon>
+    <div
+      class="content-wrapper rounded-xl shadow-md p-10 my-10"
+      :style="{ backgroundColor: 'var(--bg-secondary)' }"
+    >
+      <h1 class="text-4xl font-bold mb-8 flex items-center gap-3 accent-text">
+        <el-icon :size="40" :color="'var(--accent-color)'"><Monitor /></el-icon>
         关于网站
       </h1>
 
       <div class="prose prose-lg leading-relaxed space-y-6">
         <!-- 网站介绍 -->
         <section class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4 text-[#82411c]">🌐 网站简介</h2>
-          <p class="text-gray-700 mb-4">
+          <h2 class="text-2xl font-semibold mb-4 accent-text">🌐 网站简介</h2>
+          <p class="mb-4 text-body">
             欢迎来到
-            <strong class="text-[#82411c]">Tarzan's Blog</strong
+            <strong class="accent-text">Tarzan's Blog</strong
             >！这是一个专注于技术分享和生活记录的个人博客平台。
           </p>
-          <p class="text-gray-700 mb-4">
+          <p class="mb-4 text-body">
             在这里，我会分享前端开发、后端技术、编程经验以及日常生活的点滴。希望通过这个平台，能够帮助到更多对技术感兴趣的朋友，同时也记录自己的成长轨迹。
           </p>
         </section>
 
         <!-- 技术架构 -->
         <section class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4 text-[#82411c]">🛠️ 技术架构</h2>
+          <h2 class="text-2xl font-semibold mb-4 accent-text">🛠️ 技术架构</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="p-4 bg-[#fef5f0] rounded-lg">
-              <h3 class="font-semibold text-[#82411c] mb-2">前端技术</h3>
-              <ul class="text-gray-700 space-y-1 text-sm pl-4">
+            <div class="p-4 soft-card rounded-lg">
+              <h3 class="font-semibold accent-text mb-2">前端技术</h3>
+              <ul class="space-y-1 text-sm pl-4 text-body">
                 <li>Vue 3 - 渐进式 JavaScript 框架</li>
                 <li>Element Plus - UI 组件库</li>
                 <li>Unocss - 实用优先的 CSS 框架</li>
@@ -35,9 +38,9 @@
                 <li>Pinia - Vue 状态管理</li>
               </ul>
             </div>
-            <div class="p-4 bg-[#fef5f0] rounded-lg">
-              <h3 class="font-semibold text-[#82411c] mb-2">后端技术</h3>
-              <ul class="text-gray-700 space-y-1 text-sm pl-4">
+            <div class="p-4 soft-card rounded-lg">
+              <h3 class="font-semibold accent-text mb-2">后端技术</h3>
+              <ul class="space-y-1 text-sm pl-4 text-body">
                 <li>Node.js - JavaScript 运行时</li>
                 <li>Express - Web 应用框架</li>
                 <li>Sequelize - ORM 框架</li>
@@ -51,48 +54,48 @@
 
         <!-- 功能特性 -->
         <section class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4 text-[#82411c]">✨ 功能特性</h2>
+          <h2 class="text-2xl font-semibold mb-4 accent-text">✨ 功能特性</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="flex items-start gap-2">
-              <el-icon :size="20" color="#82411c" class="mt-1"><CircleCheck /></el-icon>
+              <el-icon :size="20" :color="'var(--accent-color)'" class="mt-1"><CircleCheck /></el-icon>
               <div>
-                <p class="font-semibold text-gray-800">文章管理</p>
-                <p class="text-sm text-gray-600">支持 Markdown 编辑，文章分类管理</p>
+                <p class="font-semibold text-strong">文章管理</p>
+                <p class="text-sm text-body">支持 Markdown 编辑，文章分类管理</p>
               </div>
             </div>
             <div class="flex items-start gap-2">
-              <el-icon :size="20" color="#82411c" class="mt-1"><CircleCheck /></el-icon>
+              <el-icon :size="20" :color="'var(--accent-color)'" class="mt-1"><CircleCheck /></el-icon>
               <div>
-                <p class="font-semibold text-gray-800">搜索功能</p>
-                <p class="text-sm text-gray-600">快速搜索文章标题和内容</p>
+                <p class="font-semibold text-strong">搜索功能</p>
+                <p class="text-sm text-body">快速搜索文章标题和内容</p>
               </div>
             </div>
             <div class="flex items-start gap-2">
-              <el-icon :size="20" color="#82411c" class="mt-1"><CircleCheck /></el-icon>
+              <el-icon :size="20" :color="'var(--accent-color)'" class="mt-1"><CircleCheck /></el-icon>
               <div>
-                <p class="font-semibold text-gray-800">分类筛选</p>
-                <p class="text-sm text-gray-600">按技术、随笔、生活等分类浏览</p>
+                <p class="font-semibold text-strong">分类筛选</p>
+                <p class="text-sm text-body">按技术、随笔、生活等分类浏览</p>
               </div>
             </div>
             <div class="flex items-start gap-2">
-              <el-icon :size="20" color="#82411c" class="mt-1"><CircleCheck /></el-icon>
+              <el-icon :size="20" :color="'var(--accent-color)'" class="mt-1"><CircleCheck /></el-icon>
               <div>
-                <p class="font-semibold text-gray-800">响应式设计</p>
-                <p class="text-sm text-gray-600">适配各种设备屏幕尺寸</p>
+                <p class="font-semibold text-strong">响应式设计</p>
+                <p class="text-sm text-body">适配各种设备屏幕尺寸</p>
               </div>
             </div>
             <div class="flex items-start gap-2">
-              <el-icon :size="20" color="#82411c" class="mt-1"><CircleCheck /></el-icon>
+              <el-icon :size="20" :color="'var(--accent-color)'" class="mt-1"><CircleCheck /></el-icon>
               <div>
-                <p class="font-semibold text-gray-800">代码高亮</p>
-                <p class="text-sm text-gray-600">支持多种编程语言语法高亮</p>
+                <p class="font-semibold text-strong">代码高亮</p>
+                <p class="text-sm text-body">支持多种编程语言语法高亮</p>
               </div>
             </div>
             <div class="flex items-start gap-2">
-              <el-icon :size="20" color="#82411c" class="mt-1"><CircleCheck /></el-icon>
+              <el-icon :size="20" :color="'var(--accent-color)'" class="mt-1"><CircleCheck /></el-icon>
               <div>
-                <p class="font-semibold text-gray-800">后台管理</p>
-                <p class="text-sm text-gray-600">完善的内容管理后台系统</p>
+                <p class="font-semibold text-strong">后台管理</p>
+                <p class="text-sm text-body">完善的内容管理后台系统</p>
               </div>
             </div>
           </div>
@@ -100,24 +103,24 @@
 
         <!-- 版本信息 -->
         <section class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4 text-[#82411c]">📦 版本信息</h2>
-          <div class="bg-gray-50 p-4 rounded-lg">
+          <h2 class="text-2xl font-semibold mb-4 accent-text">📦 版本信息</h2>
+          <div class="soft-card p-4 rounded-lg">
             <div class="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span class="text-gray-600">当前版本：</span>
-                <span class="font-semibold text-gray-800">v1.0.0</span>
+                <span class="text-body">当前版本：</span>
+                <span class="font-semibold text-strong">v1.0.0</span>
               </div>
               <div>
-                <span class="text-gray-600">更新日期：</span>
-                <span class="font-semibold text-gray-800">2025-11-22</span>
+                <span class="text-body">更新日期：</span>
+                <span class="font-semibold text-strong">2025-11-22</span>
               </div>
               <div>
-                <span class="text-gray-600">运行天数：</span>
-                <span class="font-semibold text-gray-800">{{ runningDays }} 天</span>
+                <span class="text-body">运行天数：</span>
+                <span class="font-semibold text-strong">{{ runningDays }} 天</span>
               </div>
               <div>
-                <span class="text-gray-600">文章总数：</span>
-                <span class="font-semibold text-gray-800">{{ totalArticles }} 篇</span>
+                <span class="text-body">文章总数：</span>
+                <span class="font-semibold text-strong">{{ totalArticles }} 篇</span>
               </div>
             </div>
           </div>
@@ -125,44 +128,44 @@
 
         <!-- 开发计划 -->
         <section class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4 text-[#82411c]">🚀 开发计划</h2>
-          <ul class="space-y-2 text-gray-700">
+          <h2 class="text-2xl font-semibold mb-4 accent-text">🚀 开发计划</h2>
+          <ul class="space-y-2 text-body">
             <li class="flex items-start gap-2">
-              <el-icon :size="16" color="#82411c" class="mt-1"><Clock /></el-icon>
+              <el-icon :size="16" :color="'var(--accent-color)'" class="mt-1"><Clock /></el-icon>
               <span>评论系统优化</span>
             </li>
             <li class="flex items-start gap-2">
-              <el-icon :size="16" color="#82411c" class="mt-1"><Clock /></el-icon>
+              <el-icon :size="16" :color="'var(--accent-color)'" class="mt-1"><Clock /></el-icon>
               <span>留言板</span>
             </li>
             <li class="flex items-start gap-2">
-              <el-icon :size="16" color="#82411c" class="mt-1"><Clock /></el-icon>
+              <el-icon :size="16" :color="'var(--accent-color)'" class="mt-1"><Clock /></el-icon>
               <span>访问统计分析</span>
             </li>
             <li class="flex items-start gap-2">
-              <el-icon :size="16" color="#82411c" class="mt-1"><Clock /></el-icon>
+              <el-icon :size="16" :color="'var(--accent-color)'" class="mt-1"><Clock /></el-icon>
               <span>深色模式支持</span>
             </li>
             <li class="flex items-start gap-2">
-              <el-icon :size="16" color="#82411c" class="mt-1"><Clock /></el-icon>
+              <el-icon :size="16" :color="'var(--accent-color)'" class="mt-1"><Clock /></el-icon>
               <span>语言切换功能</span>
             </li>
             <li class="flex items-start gap-2">
-              <el-icon :size="16" color="#82411c" class="mt-1"><Clock /></el-icon>
+              <el-icon :size="16" :color="'var(--accent-color)'" class="mt-1"><Clock /></el-icon>
               <span>友情链接</span>
             </li>
           </ul>
         </section>
 
         <!-- 致谢 -->
-        <section class="mt-10 p-6 bg-[#fef5f0] rounded-lg border-l-4 border-[#82411c]">
-          <h3 class="text-xl font-semibold mb-3 text-[#82411c]">💖 特别感谢</h3>
-          <p class="text-gray-700">
+        <section class="mt-10 p-6 soft-card rounded-lg border-l-4 accent-border">
+          <h3 class="text-xl font-semibold mb-3 accent-text">💖 特别感谢</h3>
+          <p class="text-body">
             UI以及交互设计借鉴了以下开源项目：
             <a
               href="https://flowersink.com/welcome"
               target="_blank"
-              class="text-[#82411c] hover:text-[#a0522d]"
+              class="accent-text hover:text-[#a0522d]"
               >Flowersink</a
             >
           </p>
@@ -202,12 +205,15 @@ const totalArticles = computed(() => {
 .about-site-container {
   max-width: 1200px;
   margin: 0 auto;
+  color: var(--text-secondary);
 
   @media (max-width: 1024px) {
     max-width: 100%;
   }
 
   .content-wrapper {
+    color: var(--text-secondary);
+
     @media (max-width: 768px) {
       padding: 1.5rem !important;
       margin: 1.5rem 0 !important;
@@ -308,5 +314,26 @@ const totalArticles = computed(() => {
       font-size: 16px;
     }
   }
+}
+
+.accent-text {
+  color: var(--accent-color);
+}
+
+.text-body {
+  color: var(--text-secondary);
+}
+
+.text-strong {
+  color: var(--text-primary);
+}
+
+.soft-card {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+.accent-border {
+  border-color: var(--accent-color);
 }
 </style>

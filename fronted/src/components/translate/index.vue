@@ -31,33 +31,26 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, onMounted, h, computed } from 'vue'
-import { Sort } from '@element-plus/icons-vue'
+<script setup>
+import { ref, onMounted, computed, defineOptions } from 'vue'
+// @ts-ignore: 静态资源声明
 import i18n from '@/assets/i18n.png'
 
-// 声明全局 translate 对象类型
-declare global {
-  interface Window {
-    translate: any
-  }
-  const translate: any
-}
+defineOptions({
+  name: 'TranslateComponent',
+})
 
-// 定义语言选项类型
-interface LanguageOption {
-  id: string
-  name: string
-}
+// translate 全局对象
+const translate = window.translate
 
 // 选中的语言ID（双向绑定值）
-const language = ref<string | null>(null)
+const language = ref(null)
 
 // 语言选项列表
-const LanguageSelectLanguageList = ref<LanguageOption[]>([])
+const LanguageSelectLanguageList = ref([])
 
 // popover 显示状态
-const popoverVisible = ref<boolean>(false)
+const popoverVisible = ref(false)
 
 // 计算当前语言名称
 const currentLanguageName = computed(() => {
@@ -66,13 +59,13 @@ const currentLanguageName = computed(() => {
 })
 
 // 处理语言选择变化
-const LanguageSelectOnChange = (event: Event) => {
+const LanguageSelectOnChange = (event) => {
   // 从事件对象中获取选中的值
-  const target = event.target as HTMLSelectElement
+  const target = event.target
   const value = target.value
 
   language.value = value
-  window.translate.selectLanguageTag.selectOnChange({
+  translate.selectLanguageTag.selectOnChange({
     target: {
       value: value,
     },
@@ -80,12 +73,12 @@ const LanguageSelectOnChange = (event: Event) => {
 }
 
 // 处理点击语言选项
-const handleLanguageClick = (langId: string) => {
+const handleLanguageClick = (langId) => {
   if (langId !== language.value) {
     language.value = langId
 
     // 映射 translate 语言 ID 到 Vue i18n 的 locale
-    const langMap: Record<string, string> = {
+    const langMap = {
       zh: 'zh-cn',
       chinese_simplified: 'zh-cn',
       chinese_traditional: 'zh-cn',
@@ -106,7 +99,7 @@ const handleLanguageClick = (langId: string) => {
     window.dispatchEvent(new CustomEvent('languageChanged', { detail: { locale: i18nLocale } }))
 
     // 调用 translate 系统的语言切换
-    window.translate.selectLanguageTag.selectOnChange({
+    translate.selectLanguageTag.selectOnChange({
       target: {
         value: langId,
       },
@@ -171,14 +164,15 @@ onMounted(() => {
     // 显示切换语言
     const TranslateJsSelectLanguages = document.getElementsByClassName('LanguageSelect')
     for (let li = 0; li < TranslateJsSelectLanguages.length; li++) {
-      ;(TranslateJsSelectLanguages[li] as HTMLElement).style.display = 'block'
+      const el = TranslateJsSelectLanguages[li]
+      el.style.display = 'block'
     }
   }
 
   // 处理语言列表数据
   translate.selectLanguageTag.customUI = function (externalLanguageList) {
     // 整理允许显示的语种
-    const allowLanguageList: LanguageOption[] = []
+    const allowLanguageList = []
 
     // 判断 selectLanguageTag.languages 中允许使用哪些
     if (translate.selectLanguageTag.languages.length > 0) {
@@ -224,14 +218,20 @@ onMounted(() => {
   padding: 4px 8px;
   border-radius: 4px;
   transition: background-color 0.3s;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
 }
 
 .lang-selector:hover {
-  background-color: #f5f5f5;
+  background-color: var(--hover-bg);
+  color: #fff;
 }
 
 .lang-options {
   padding: 4px 0;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-radius: 6px;
 }
 
 .lang-option {
@@ -242,11 +242,11 @@ onMounted(() => {
 }
 
 .lang-option:hover {
-  background-color: #f5f5f5;
+  background-color: var(--hover-bg);
+  color: #fff;
 }
 
 .lang-option.active {
-  color: #773a1e;
   font-weight: 500;
 }
 .i18n-text {
@@ -254,5 +254,10 @@ onMounted(() => {
   @media (max-width: 768px) {
     display: none;
   }
+}
+
+// Popover 被 teleport 到 body，使用全局选择器才能生效
+:global(.el-popover.el-popper) {
+  padding: 0 !important;
 }
 </style>

@@ -1,7 +1,10 @@
 <template>
   <div class="home-container">
     <!-- Title -->
-    <div class="title-wrapper flex justify-center my-[50px] text-[#82411c] font-bold">
+    <div
+      class="title-wrapper flex justify-center my-[50px] font-bold"
+      :style="{ color: 'var(--text-primary)' }"
+    >
       <h1 class="main-title">Welcome To Tarzan's Blog</h1>
     </div>
 
@@ -12,18 +15,36 @@
         </el-col>
         <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
           <div class="sidebar-wrapper">
-            <div class="profile-card bg-[white] shadow-md p-6 rounded-xl overflow-hidden">
+            <div
+              class="profile-card shadow-md p-6 rounded-xl overflow-hidden"
+              :style="{ backgroundColor: 'var(--bg-secondary)' }"
+            >
               <div
                 class="profile-img-wrapper flex justify-center align-center items-center overflow-hidden"
               >
                 <img :src="cat" alt="cat" class="w-full h-full object-contain" />
               </div>
-              <h2 class="flex justify-center text-[#7a4525] profile-name">Tarzan</h2>
-              <div class="text-center py-6px profile-text">你好,我是Tarzan</div>
-              <div class="text-center py-6px profile-text">这里是我分享技术 文章生活点滴的地方</div>
-              <div class="text-center py-6px profile-text">希望你能在这里收获知识或者好心情</div>
+              <h2
+                class="flex justify-center profile-name"
+                :style="{ color: 'var(--accent-color)' }"
+              >Tarzan</h2>
+              <div
+                class="text-center py-6px profile-text"
+                :style="{ color: 'var(--text-secondary)' }"
+              >你好,我是Tarzan</div>
+              <div
+                class="text-center py-6px profile-text"
+                :style="{ color: 'var(--text-secondary)' }"
+              >这里是我分享技术 文章生活点滴的地方</div>
+              <div
+                class="text-center py-6px profile-text"
+                :style="{ color: 'var(--text-secondary)' }"
+              >希望你能在这里收获知识或者好心情</div>
             </div>
-            <div class="stats-card bg-[white] shadow-md p-6 rounded-xl overflow-hidden mt-[15px]">
+            <div
+              class="stats-card shadow-md p-6 rounded-xl overflow-hidden mt-[15px]"
+              :style="{ backgroundColor: 'var(--bg-secondary)' }"
+            >
               <div class="flex items-center justify-center manuel-tag stats-grid">
                 <div class="stat-item">
                   <el-tag effect="dark">{{ techArticleCount }}篇</el-tag>
@@ -174,6 +195,7 @@ onMounted(() => {
   .stats-card {
     height: auto;
     min-height: 180px;
+    margin-bottom: 40px;
 
     @media (max-width: 768px) {
       min-height: auto;
@@ -214,9 +236,9 @@ onMounted(() => {
   margin-left: 0 !important;
   margin-right: 0 !important;
   display: block;
-  background-color: #fff;
-  border-color: #82411c;
-  color: #82411c;
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
   transition:
     background-color 0.3s,
     color 0.3s;
@@ -232,18 +254,18 @@ onMounted(() => {
   }
 
   &:hover {
-    background-color: #82411c;
+    background-color: var(--accent-color);
     color: #fff;
   }
 }
 
 .manuel-tag {
   :deep(.el-tag) {
-    --el-tag-bg-color: #82411c !important;
-    --el-tag-border-color: #82411c !important;
-    --el-tag-hover-color: #82411c !important;
-    background-color: #82411c !important;
-    border-color: #82411c !important;
+    --el-tag-bg-color: var(--accent-color) !important;
+    --el-tag-border-color: var(--accent-color) !important;
+    --el-tag-hover-color: var(--accent-color) !important;
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
     border: none !important;
 
     @media (max-width: 768px) {

@@ -5,34 +5,47 @@
     </div>
     <div
       v-else-if="article"
-      class="bg-white rounded-8px p-40px shadow-[0_2px_12px_rgba(0,0,0,0.1)] lt-md:p-24px lt-md:rounded-6px lt-sm:p-16px lt-sm:rounded-4px"
+      class="rounded-8px p-40px shadow-[0_2px_12px_rgba(0,0,0,0.1)] lt-md:p-24px lt-md:rounded-6px lt-sm:p-16px lt-sm:rounded-4px"
+      :style="{
+        backgroundColor: 'var(--bg-secondary)',
+        color: 'var(--text-secondary)',
+      }"
     >
       <!-- 文章标题 -->
       <h1
-        class="text-32px font-bold text-[#303133] mb-20px lh-1.5 lt-md:text-24px lt-md:mb-16px lt-sm:text-20px lt-sm:mb-12px lt-sm:lh-1.4"
+        class="text-32px font-bold mb-20px lh-1.5 lt-md:text-24px lt-md:mb-16px lt-sm:text-20px lt-sm:mb-12px lt-sm:lh-1.4"
+        :style="{ color: 'var(--text-primary)' }"
       >
         {{ article.title }}
       </h1>
 
       <!-- 文章信息 -->
       <div
-        class="flex items-center gap-10px text-[#909399] text-14px mb-30px pb-20px border-b-1px border-b-solid border-[#ebeef5] flex-wrap lt-md:text-13px lt-md:gap-8px lt-md:mb-20px lt-md:pb-15px lt-sm:text-11px lt-sm:gap-6px lt-sm:mb-15px lt-sm:pb-12px"
+        class="flex items-center gap-10px text-14px mb-30px pb-20px border-b-1px border-b-solid flex-wrap lt-md:text-13px lt-md:gap-8px lt-md:mb-20px lt-md:pb-15px lt-sm:text-11px lt-sm:gap-6px lt-sm:mb-15px lt-sm:pb-12px"
+        :style="{
+          color: 'var(--text-secondary)',
+          borderBottomColor: 'var(--border-color)',
+        }"
       >
         <span>作者: Tarzan</span>
-        <span class="text-[#dcdfe6] lt-sm:mx-2px">|</span>
+        <span class="lt-sm:mx-2px" :style="{ color: 'var(--border-color)' }">|</span>
         <span>分类: {{ article.blogType?.name }}</span>
-        <span class="text-[#dcdfe6] lt-sm:mx-2px">|</span>
+        <span class="lt-sm:mx-2px" :style="{ color: 'var(--border-color)' }">|</span>
         <span>浏览量: {{ article.scanNumber }}</span>
-        <span class="text-[#dcdfe6] lt-sm:mx-2px">|</span>
+        <span class="lt-sm:mx-2px" :style="{ color: 'var(--border-color)' }">|</span>
         <span>评论数: {{ article.commentNumber }}</span>
-        <span class="text-[#dcdfe6] lt-sm:mx-2px">|</span>
+        <span class="lt-sm:mx-2px" :style="{ color: 'var(--border-color)' }">|</span>
         <span>发布时间: {{ formatDate(article.createDate) }}</span>
       </div>
 
       <!-- 文章描述 -->
       <div
         v-if="article.description"
-        class="text-16px text-[#606266] lh-[30px] mb-30px p-20px bg-[#f5f7fa] rounded-4px lt-md:text-15px lt-md:p-16px lt-md:mb-20px lt-sm:text-14px lt-sm:p-12px lt-sm:mb-16px lt-sm:lh-1.6"
+        class="text-16px lh-[30px] mb-30px p-20px rounded-4px lt-md:text-15px lt-md:p-16px lt-md:mb-20px lt-sm:text-14px lt-sm:p-12px lt-sm:mb-16px lt-sm:lh-1.6"
+        :style="{
+          color: 'var(--text-secondary)',
+          backgroundColor: 'var(--bg-primary)',
+        }"
       >
         {{ article.description }}
       </div>
@@ -42,10 +55,12 @@
 
       <!-- 评论区域 -->
       <div
-        class="mt-50px pt-30px border-t-2px border-t-solid border-[#ebeef5] lt-md:mt-35px lt-md:pt-20px lt-sm:mt-25px lt-sm:pt-15px"
+        class="mt-50px pt-30px border-t-2px border-t-solid lt-md:mt-35px lt-md:pt-20px lt-sm:mt-25px lt-sm:pt-15px"
+        :style="{ borderTopColor: 'var(--border-color)' }"
       >
         <h3
-          class="text-20px font-600 text-[#82411c] mb-20px lt-md:text-18px lt-md:mb-16px lt-sm:text-16px lt-sm:mb-12px"
+          class="text-20px font-600 mb-20px lt-md:text-18px lt-md:mb-16px lt-sm:text-16px lt-sm:mb-12px"
+          :style="{ color: 'var(--accent-color)' }"
         >
           留个Emoji
         </h3>
@@ -53,16 +68,21 @@
           <div
             v-for="(comment, index) in comments"
             :key="index"
-            class="flex flex-col items-center p-15px-20px border-2px border-solid border-[#ebeef5] rounded-8px cursor-pointer transition-all duration-300 bg-white min-w-80px hover:border-[#409eff] hover:-translate-y-2px hover:shadow-[0_4px_12px_rgba(64,158,255,0.2)] lt-md:p-12px-16px lt-md:min-w-70px lt-md:hover:-translate-y-1px lt-sm:p-10px-12px lt-sm:min-w-60px lt-sm:border-1.5px"
-            :class="{
-              'border-[#409eff] bg-[#ecf5ff] scale-105 lt-md:scale-103': comment.clicked,
+            class="flex flex-col items-center p-15px-20px border-2px border-solid rounded-8px cursor-pointer transition-all duration-300 min-w-80px hover:-translate-y-2px lt-md:p-12px-16px lt-md:min-w-70px lt-md:hover:-translate-y-1px lt-sm:p-10px-12px lt-sm:min-w-60px lt-sm:border-1.5px"
+            :style="{
+              borderColor: comment.clicked ? 'var(--accent-color)' : 'var(--border-color)',
+              backgroundColor: comment.clicked ? 'var(--bg-primary)' : 'var(--bg-secondary)',
+              boxShadow: comment.clicked ? '0 4px 12px rgba(0,0,0,0.25)' : 'none',
             }"
             @click="handleEmojiClick(comment.emoji)"
           >
             <div class="text-32px mb-8px lt-md:text-28px lt-md:mb-6px lt-sm:text-24px lt-sm:mb-4px">
               {{ comment.emoji }}
             </div>
-            <div class="text-14px text-[#606266] font-500 lt-md:text-13px lt-sm:text-12px">
+            <div
+              class="text-14px font-500 lt-md:text-13px lt-sm:text-12px"
+              :style="{ color: 'var(--text-secondary)' }"
+            >
               {{ comment.count }}
             </div>
           </div>
@@ -190,7 +210,7 @@ onMounted(() => {
 .article-body {
   font-size: 16px;
   line-height: 1.8;
-  color: #303133;
+  color: var(--text-secondary);
   margin-bottom: 50px;
 
   @media (max-width: 768px) {
@@ -272,7 +292,7 @@ onMounted(() => {
 
 .article-body :deep(code) {
   padding: 2px 4px;
-  background: #f5f7fa;
+  background: var(--bg-primary);
   border-radius: 3px;
   font-family: 'Courier New', monospace;
 
@@ -288,7 +308,7 @@ onMounted(() => {
 
 .article-body :deep(pre) {
   padding: 16px;
-  background: #f5f7fa;
+  background: var(--bg-primary);
   border-radius: 4px;
   overflow-x: auto;
   margin-bottom: 16px;

@@ -1,41 +1,44 @@
 <template>
   <div class="about-me-container">
-    <div class="content-wrapper bg-white rounded-xl shadow-md p-10 my-10">
-      <h1 class="text-4xl font-bold mb-8 text-[#82411c] flex items-center gap-3">
-        <el-icon :size="40"><User /></el-icon>
+    <div
+      class="content-wrapper rounded-xl shadow-md p-10 my-10"
+      :style="{ backgroundColor: 'var(--bg-secondary)' }"
+    >
+      <h1 class="text-4xl font-bold mb-8 flex items-center gap-3 accent-text">
+        <el-icon :size="40" :color="'var(--accent-color)'"><User /></el-icon>
         关于我
       </h1>
 
       <div class="prose prose-lg leading-relaxed space-y-6">
         <!-- 个人介绍 -->
         <section class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4 text-[#82411c]">👋 你好</h2>
-          <p class="text-gray-700 my-4">
+          <h2 class="text-2xl font-semibold mb-4 accent-text">👋 你好</h2>
+          <p class="my-4 text-body">
             我是
-            <strong class="text-[#82411c]">Tarzan</strong
+            <strong class="accent-text">Tarzan</strong
             >，一名热爱技术的开发者和内容创作者,当前居住在杭州。
           </p>
           <p>
-            <strong class="text-[#82411c]">Tarzan</strong>
+            <strong class="accent-text">Tarzan</strong>
             的昵称来源于
             <a
               href="https://zh.wikipedia.org/wiki/%E4%BA%BA%E7%8C%BF%E6%B3%B0%E5%B1%B1"
               target="_blank"
-              class="text-[#82411c] hover:text-[#a0522d]"
+              class="accent-text hover:text-[#a0522d]"
               >《人猿泰山》</a
             >
             ，寓意着勇敢、自由、坚强,
-            <strong class="text-[#82411c]">Tarzan</strong> 也是一名LOL一名我很喜爱的职业选手,
+            <strong class="accent-text">Tarzan</strong> 也是一名LOL一名我很喜爱的职业选手,
             希望我们都能勇敢、自由、坚强的对待生活
           </p>
-          <p class="text-gray-700 my-4">
+          <p class="my-4 text-body">
             我喜欢探索新技术、分享知识，并通过代码创造有价值的东西。这个博客是我记录学习历程、分享技术见解和生活感悟的地方。
           </p>
         </section>
 
         <!-- 技术栈 -->
         <section class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4 text-[#82411c]">💻 技术栈</h2>
+          <h2 class="text-2xl font-semibold mb-4 accent-text">💻 技术栈</h2>
           <div class="flex flex-wrap gap-2">
             <el-tag effect="plain" type="warning">Vue.js</el-tag>
             <el-tag effect="plain" type="warning">Uniapp</el-tag>
@@ -51,8 +54,8 @@
 
         <!-- 兴趣爱好 -->
         <section class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4 text-[#82411c]">🎯 兴趣爱好</h2>
-          <ul class="list-disc list-inside text-gray-700 space-y-2">
+          <h2 class="text-2xl font-semibold mb-4 accent-text">🎯 兴趣爱好</h2>
+          <ul class="list-disc list-inside text-body space-y-2">
             <li>💡 学习新技术和最佳实践</li>
             <li>📝 技术写作和知识分享</li>
             <li>🎨 探索 UI/UX 设计</li>
@@ -63,28 +66,28 @@
 
         <!-- 联系方式 -->
         <section class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4 text-[#82411c]">📫 联系我</h2>
-          <p class="text-gray-700 mb-4">
+          <h2 class="text-2xl font-semibold mb-4 accent-text">📫 联系我</h2>
+          <p class="mb-4 text-body">
             如果你对我的文章感兴趣，或者想与我交流技术、合作项目，欢迎通过以下方式联系我：
           </p>
           <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
-              <el-icon :size="20" color="#82411c"><Message /></el-icon>
-              <span class="text-gray-700"
+              <el-icon :size="20" :color="'var(--accent-color)'"><Message /></el-icon>
+              <span class="text-body"
                 >邮箱：<a
                   href="mailto:3279913400@qq.com"
-                  class="text-[#82411c] underline hover:text-[#a0522d]"
+                  class="accent-text underline hover:text-[#a0522d]"
                   >3279913400@qq.com</a
                 ></span
               >
             </div>
             <div class="flex items-center gap-2">
-              <el-icon :size="20" color="#82411c"><Link /></el-icon>
-              <span class="text-gray-700"
+              <el-icon :size="20" :color="'var(--accent-color)'"><Link /></el-icon>
+              <span class="text-body"
                 >GitHub：<a
                   href="https://github.com/fanfancoding"
                   target="_blank"
-                  class="text-[#82411c] underline hover:text-[#a0522d]"
+                  class="accent-text underline hover:text-[#a0522d]"
                   >@fanfancoding</a
                 ></span
               >
@@ -93,8 +96,8 @@
         </section>
 
         <!-- 座右铭 -->
-        <section class="mt-10 p-6 bg-[#fef5f0] rounded-lg border-l-4 border-[#82411c]">
-          <p class="text-lg italic text-gray-700 text-center">"代码改变世界，技术创造未来。"</p>
+        <section class="mt-10 p-6 soft-card rounded-lg border-l-4 accent-border">
+          <p class="text-lg italic text-body text-center">"代码改变世界，技术创造未来。"</p>
         </section>
       </div>
     </div>
@@ -113,12 +116,15 @@ defineOptions({
 .about-me-container {
   max-width: 1200px;
   margin: 0 auto;
+  color: var(--text-secondary);
 
   @media (max-width: 1024px) {
     max-width: 100%;
   }
 
   .content-wrapper {
+    color: var(--text-secondary);
+
     @media (max-width: 768px) {
       padding: 1.5rem !important;
       margin: 1.5rem 0 !important;
@@ -183,10 +189,10 @@ defineOptions({
   }
 
   :deep(.el-tag) {
-    --el-tag-bg-color: #fef5f0;
-    --el-tag-border-color: #f4d1be;
-    --el-tag-text-color: #82411c;
-    --el-tag-hover-color: #82411c;
+    --el-tag-bg-color: var(--bg-primary);
+    --el-tag-border-color: var(--border-color);
+    --el-tag-text-color: var(--accent-color);
+    --el-tag-hover-color: var(--accent-color);
 
     @media (max-width: 768px) {
       font-size: 13px;
@@ -208,5 +214,22 @@ defineOptions({
       font-size: 16px;
     }
   }
+}
+
+.accent-text {
+  color: var(--accent-color);
+}
+
+.text-body {
+  color: var(--text-secondary);
+}
+
+.soft-card {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+.accent-border {
+  border-color: var(--accent-color);
 }
 </style>

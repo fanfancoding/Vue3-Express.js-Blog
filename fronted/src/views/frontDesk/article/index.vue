@@ -1,6 +1,9 @@
 <template>
   <!-- Title -->
-  <div class="flex justify-center my-[50px] text-[#82411c] font-bold">
+  <div
+    class="flex justify-center my-[50px] font-bold"
+    :style="{ color: 'var(--text-primary)' }"
+  >
     <h1>{{ currentCategoryName || '全部文章' }}</h1>
   </div>
 
@@ -42,7 +45,11 @@
       <!-- 右侧分类筛选区域 -->
       <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
         <div
-          class="sidebar-filter bg-[white] shadow-md p-6 rounded-xl overflow-hidden sticky top-4"
+          class="sidebar-filter shadow-md p-6 rounded-xl overflow-hidden sticky top-4"
+          :style="{
+            backgroundColor: 'var(--bg-secondary)',
+            color: 'var(--text-secondary)'
+          }"
         >
           <el-input
             v-model="searchKeyword"
@@ -346,7 +353,7 @@ function handleSearch() {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
-  border: 1px solid transparent;
+  border: 1px solid var(--border-color);
   min-width: 60px;
   min-height: 32px;
 
@@ -361,14 +368,14 @@ function handleSearch() {
   }
 
   &:hover {
-    background-color: #fef5f0;
-    border-color: #f4d1be;
+    background-color: var(--bg-primary);
+    border-color: var(--accent-color);
   }
 
   &.active {
-    background-color: #82411c;
+    background-color: var(--accent-color);
     color: white;
-    border-color: #82411c;
+    border-color: var(--accent-color);
 
     .category-count {
       --el-tag-bg-color: rgba(255, 255, 255, 0.2);
@@ -408,15 +415,25 @@ function handleSearch() {
   }
 }
 
+:deep(.sidebar-filter .el-input__wrapper) {
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+:deep(.sidebar-filter .el-input__inner) {
+  color: var(--text-secondary);
+}
+
 :deep(.el-pagination) {
   .btn-prev,
   .btn-next,
   .el-pager li {
     &:hover {
-      color: #82411c;
+      color: var(--accent-color);
     }
     &.is-active {
-      background-color: #82411c;
+      background-color: var(--accent-color);
       color: white;
     }
   }
@@ -424,7 +441,7 @@ function handleSearch() {
 
 :deep(.el-loading-spinner) {
   .circular {
-    stroke: #82411c;
+    stroke: var(--accent-color);
   }
 }
 
@@ -432,10 +449,10 @@ function handleSearch() {
 :deep(.el-input) {
   .el-input__wrapper {
     &.is-focus {
-      box-shadow: 0 0 0 1px #82411c inset;
+      box-shadow: 0 0 0 1px var(--accent-color) inset;
     }
     &:hover {
-      box-shadow: 0 0 0 1px #82411c inset;
+      box-shadow: 0 0 0 1px var(--accent-color) inset;
     }
 
     @media (max-width: 768px) {

@@ -3,11 +3,12 @@
     class="message-board-page max-w-1200px mx-auto p-20px lt-lg:max-w-100% lt-lg:p-15px lt-md:p-10px lt-sm:p-8px"
   >
     <div
-      class="bg-white rounded-8px p-40px shadow-[0_2px_12px_rgba(0,0,0,0.1)] lt-md:p-24px lt-md:rounded-6px lt-sm:p-16px lt-sm:rounded-4px"
+      class="rounded-8px p-40px shadow-[0_2px_12px_rgba(0,0,0,0.1)] lt-md:p-24px lt-md:rounded-6px lt-sm:p-16px lt-sm:rounded-4px"
+      :style="{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)' }"
     >
       <!-- 标题 -->
       <h1
-        class="text-32px font-bold text-[#82411c] mb-20px flex items-center gap-10px lt-md:text-24px lt-md:mb-16px lt-sm:text-20px lt-sm:mb-12px"
+        class="text-32px font-bold mb-20px flex items-center gap-10px lt-md:text-24px lt-md:mb-16px lt-sm:text-20px lt-sm:mb-12px accent-text"
       >
         <el-icon :size="32" class="lt-md:text-24px lt-sm:text-20px">
           <ChatLineRound />
@@ -17,10 +18,10 @@
 
       <!-- 留言表单 -->
       <div
-        class="mb-30px p-20px bg-[#fef5f0] rounded-8px lt-md:p-16px lt-md:mb-20px lt-sm:p-12px lt-sm:mb-16px"
+        class="mb-30px p-20px rounded-8px lt-md:p-16px lt-md:mb-20px lt-sm:p-12px lt-sm:mb-16px soft-card"
       >
         <h2
-          class="text-20px font-semibold mb-16px text-[#82411c] flex items-center gap-8px lt-md:text-18px lt-md:mb-12px lt-sm:text-16px lt-sm:mb-10px"
+          class="text-20px font-semibold mb-16px flex items-center gap-8px lt-md:text-18px lt-md:mb-12px lt-sm:text-16px lt-sm:mb-10px accent-text"
         >
           <el-icon :size="20" class="lt-md:text-18px lt-sm:text-16px">
             <Message />
@@ -63,7 +64,7 @@
             <el-button
               :loading="submitting"
               class="lt-sm:text-14px submit-btn"
-              style="background-color: #82411c; border-color: #82411c; color: #fff"
+              color="var(--accent-color)"
               @click="handleSubmit"
             >
               <el-icon style="color: #fff">
@@ -78,7 +79,7 @@
       <!-- 留言列表 -->
       <div class="message-list">
         <h2
-          class="text-24px font-semibold mb-20px text-[#82411c] lt-md:text-20px lt-md:mb-16px lt-sm:text-18px lt-sm:mb-12px"
+          class="text-24px font-semibold mb-20px lt-md:text-20px lt-md:mb-16px lt-sm:text-18px lt-sm:mb-12px accent-text"
         >
           留言列表 ({{ total }})
         </h2>
@@ -103,45 +104,43 @@
                     <div
                       class="message-author flex items-center gap-8px mb-8px flex-wrap lt-sm:gap-4px lt-sm:mb-6px"
                     >
-                      <span
-                        class="font-semibold text-[#82411c] text-16px lt-md:text-15px lt-sm:text-14px"
-                      >
+                      <span class="font-semibold text-16px lt-md:text-15px lt-sm:text-14px accent-text">
                         {{ message.nickname }}
                       </span>
-                      <span v-if="message.email" class="text-12px text-[#909399] lt-sm:text-11px">
+                      <span v-if="message.email" class="text-12px text-secondary lt-sm:text-11px">
                         ({{ message.email }})
                       </span>
-                      <span class="text-12px text-[#c0c4cc] ml-auto lt-sm:text-11px">
+                      <span class="text-12px text-border ml-auto lt-sm:text-11px">
                         {{ formatDate(message.createDate) }}
                       </span>
                     </div>
                     <div
-                      class="message-content text-[#606266] whitespace-pre-wrap mb-12px text-15px lh-1.8 lt-md:text-14px lt-md:mb-10px lt-sm:text-13px lt-sm:mb-8px lt-sm:lh-1.6"
+                      class="message-content whitespace-pre-wrap mb-12px text-15px lh-1.8 lt-md:text-14px lt-md:mb-10px lt-sm:text-13px lt-sm:mb-8px lt-sm:lh-1.6 text-body"
                     >
                       {{ message.content }}
                     </div>
                     <div
                       v-if="message.reply"
-                      class="message-reply p-16px bg-[#fef5f0] rounded-6px border-l-4 border-[#82411c] lt-md:p-12px lt-sm:p-10px"
+                      class="message-reply p-16px rounded-6px lt-md:p-12px lt-sm:p-10px soft-card accent-border"
                     >
                       <div
                         class="reply-header flex items-center gap-8px mb-8px lt-sm:gap-4px lt-sm:mb-6px"
                       >
-                        <el-icon class="text-[#82411c] text-16px lt-sm:text-14px">
+                        <el-icon class="text-16px lt-sm:text-14px accent-text">
                           <User />
                         </el-icon>
-                        <span class="font-semibold text-[#82411c] text-14px lt-sm:text-13px"
+                        <span class="font-semibold text-14px lt-sm:text-13px accent-text"
                           >博主回复</span
                         >
                         <span
                           v-if="message.replyTime"
-                          class="text-12px text-[#909399] ml-auto lt-sm:text-11px"
+                          class="text-12px text-secondary ml-auto lt-sm:text-11px"
                         >
                           {{ formatDate(message.replyTime) }}
                         </span>
                       </div>
                       <div
-                        class="reply-content text-[#606266] whitespace-pre-wrap text-14px lh-1.8 lt-sm:text-13px lt-sm:lh-1.6"
+                        class="reply-content whitespace-pre-wrap text-14px lh-1.8 lt-sm:text-13px lt-sm:lh-1.6 text-body"
                       >
                         {{ message.reply }}
                       </div>
@@ -427,54 +426,109 @@ onMounted(() => {
 .message-board-page .custom-pagination .el-pagination__total {
   color: #606266;
 }
+
+/* 暗黑模式适配覆盖 */
+.message-board-page {
+  color: var(--text-secondary);
+}
+
+.message-board-page :deep(.el-form-item__label) {
+  color: var(--text-secondary);
+}
+
+.message-board-page :deep(.el-input__wrapper),
+.message-board-page :deep(.el-textarea__inner) {
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.message-board-page :deep(.el-card) {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.message-board-page :deep(.el-card__body) {
+  padding: 16px;
+}
+
+.message-board-page .submit-btn {
+  background-color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+}
+
+.message-board-page .custom-pagination .el-pager li.is-active,
+.message-board-page .custom-pagination .btn-next:hover:not(:disabled),
+.message-board-page .custom-pagination .btn-prev:hover:not(:disabled) {
+  background-color: var(--accent-color) !important;
+  color: #fff !important;
+}
+
+.message-board-page .custom-pagination .el-pager li:not(.is-active) {
+  color: var(--text-secondary);
+}
+
+.message-board-page .custom-pagination .el-pager li:not(.is-active):hover,
+.message-board-page .custom-pagination button:hover:not(:disabled) {
+  color: var(--accent-color) !important;
+}
+
+.message-board-page .custom-pagination .el-select {
+  --el-select-input-color: var(--text-secondary);
+  --el-select-input-focus-border-color: var(--accent-color);
+  --el-select-border-color-hover: var(--accent-color);
+}
 </style>
 
 <style>
 /* 下拉菜单样式（全局，因为下拉菜单在body下） */
 .el-select-dropdown {
-  --el-color-primary: #82411c;
+  --el-color-primary: var(--accent-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
 }
 
 .el-select-dropdown__item.selected,
 .el-select-dropdown__item.is-selected {
-  color: #82411c !important;
-  background-color: #fef5f0 !important;
-  --el-color-primary: #82411c;
+  color: var(--accent-color) !important;
+  background-color: var(--bg-primary) !important;
+  --el-color-primary: var(--accent-color);
 }
 
 .el-select-dropdown__item.selected span,
 .el-select-dropdown__item.selected *,
 .el-select-dropdown__item.is-selected span,
 .el-select-dropdown__item.is-selected * {
-  color: #82411c !important;
+  color: var(--accent-color) !important;
 }
 
 .el-select-dropdown__item.selected:hover,
 .el-select-dropdown__item.is-selected:hover {
-  color: #82411c !important;
-  background-color: #fef5f0 !important;
+  color: var(--accent-color) !important;
+  background-color: var(--bg-primary) !important;
 }
 
 .el-select-dropdown__item.selected:hover *,
 .el-select-dropdown__item.is-selected:hover * {
-  color: #82411c !important;
+  color: var(--accent-color) !important;
 }
 
 .el-select-dropdown__item.selected .el-icon,
 .el-select-dropdown__item.is-selected .el-icon {
-  color: #82411c !important;
+  color: var(--accent-color) !important;
 }
 
 .el-select-dropdown__item:hover {
-  background-color: #fef5f0 !important;
-  color: #82411c !important;
+  background-color: var(--bg-primary) !important;
+  color: var(--accent-color) !important;
 }
 .el-pager li.is-active {
-  background-color: #82411c !important;
+  background-color: var(--accent-color) !important;
   color: #fff !important;
 }
 .el-select__wrapper.is-focused {
-  box-shadow: 0 0 0 1px #82411c inset !important;
-  border-color: #82411c !important;
+  box-shadow: 0 0 0 1px var(--accent-color) inset !important;
+  border-color: var(--accent-color) !important;
 }
 </style>
