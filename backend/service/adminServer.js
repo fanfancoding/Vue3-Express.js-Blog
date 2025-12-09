@@ -38,25 +38,62 @@ export async function adminLoginServer(loginInfo) {
 
 // 修改账号信息服务
 export async function adminUpdateServer(updateInfo) {
-  let { loginId, name, loginPwd, oldLoginPwd } = updateInfo;
-  let result = await adminLoginDao({
-    loginId,
-    loginPwd: md5(oldLoginPwd),
-  });
-  if (result && result.dataValues) {
+  let { loginId, name, loginPwd, oldLoginPwd, currentUserId } = updateInfo;
+
+  // 如果提供了currentUserId（通过token验证），优先使用它来验证用户身份
+  if (currentUserId) {
+    // 通过ID验证用户是否存在
+    const { adminDao } = await import("../dao/adminDao.js");
+    const userResult = await adminDao.findByPk(currentUserId);
+    if (!userResult) {
+      throw new ValidationError("用户不存在");
+    }
+    const user = userResult.dataValues;
+
+    // 如果提供了旧密码，需要验证旧密码
+    if (oldLoginPwd) {
+      const isOldPwdValid = user.loginPwd === md5(oldLoginPwd);
+      if (!isOldPwdValid) {
+        throw new ValidationError("旧密码错误");
+      }
+    }
+
+    // 更新用户信息
     const updateResult = await adminUpdateDao({
-      loginPwd: md5(loginPwd),
-      name,
-      loginId,
+      loginPwd: loginPwd ? md5(loginPwd) : user.loginPwd, // 如果没有提供新密码，保持原密码
+      name: name || user.name,
+      loginId: loginId || user.loginId,
+      id: currentUserId,
     });
+
     return updateResult
       ? formatResponseData(200, "success", {
-          loginId,
-          name,
-          id: result.dataValues.id,
+          loginId: loginId || user.loginId,
+          name: name || user.name,
+          id: currentUserId,
         })
       : null;
   } else {
-    throw new ValidationError("密码错误");
+    // 回退到原有逻辑（通过loginId和oldLoginPwd验证）
+    let result = await adminLoginDao({
+      loginId,
+      loginPwd: md5(oldLoginPwd),
+    });
+    if (result && result.dataValues) {
+      const updateResult = await adminUpdateDao({
+        loginPwd: md5(loginPwd),
+        name,
+        loginId,
+      });
+      return updateResult
+        ? formatResponseData(200, "success", {
+            loginId,
+            name,
+            id: result.dataValues.id,
+          })
+        : null;
+    } else {
+      throw new ValidationError("密码错误");
+    }
   }
 }

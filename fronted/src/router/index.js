@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores'
+import { ElMessage } from 'element-plus'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -103,6 +105,39 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+// 路由守卫：检查管理后台页面的访问权限
+router.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore()
+
+  // 如果token正在验证中，等待验证完成
+  if (userStore.tokenValidating) {
+    // 等待token验证完成
+    while (userStore.tokenValidating) {
+      await new Promise(resolve => setTimeout(resolve, 50))
+    }
+  }
+
+  // 检查是否访问管理后台页面
+  if (to.path.startsWith('/management')) {
+    // 如果没有有效的登录状态，跳转到登录页面
+    if (!userStore.isLoggedIn) {
+      ElMessage.warning('请先登录后再访问管理后台')
+      next('/login')
+      return
+    }
+  }
+
+  // 检查是否访问登录页面但已经登录
+  if (to.path === '/login' && userStore.isLoggedIn) {
+    // 如果已经登录，跳转到管理后台
+    next('/management/article')
+    return
+  }
+
+  // 其他情况正常放行
+  next()
 })
 
 export default router

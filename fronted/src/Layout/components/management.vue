@@ -114,7 +114,7 @@
 </template>
 
 <script setup>
-import { defineOptions, computed, ref } from 'vue'
+import { defineOptions, computed, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Document, List, Folder, Setting, ChatLineRound, User } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -128,6 +128,14 @@ defineOptions({
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+
+// 组件挂载时检查认证状态
+onMounted(() => {
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录后再访问管理后台')
+    router.push('/login')
+  }
+})
 
 // 计算当前激活的菜单项
 const activeMenu = computed(() => {

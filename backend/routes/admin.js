@@ -59,11 +59,27 @@ router.post("/restore", async (req, res, next) => {
 
 // 修改账号信息
 router.put("/", async (req, res, next) => {
-  const result = await adminUpdateServer(req.body);
-  if (result) {
-    res.send(result);
-  } else {
-    res.send(formatResponseData(500, "error"));
+  try {
+    // 从JWT中间件中获取用户信息
+    if (!req.auth || !req.auth.id) {
+      return res.send(formatResponseData(401, "未授权访问"));
+    }
+
+    // 将当前用户ID添加到请求体中，确保只能修改自己的信息
+    const updateData = { ...req.body, currentUserId: req.auth.id };
+    const result = await adminUpdateServer(updateData);
+    if (result) {
+      res.send(result);
+    } else {
+      res.send(formatResponseData(500, "修改失败"));
+    }
+  } catch (error) {
+    console.error("Admin update error:", error);
+    if (error instanceof ValidationError) {
+      res.send(formatResponseData(400, error.message));
+    } else {
+      res.send(formatResponseData(500, "修改账号信息失败"));
+    }
   }
 });
 

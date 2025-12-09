@@ -20,9 +20,20 @@ export function formatResponseData(code, msg, data) {
 }
 
 // 解析token
-export function parseToken(token) {
+export function parseToken(token, req = null) {
   try {
-    return jwt.verify(token.split(" ")[1], md5(process.env.JWT_SECRET));
+    // 如果有req.auth（经过JWT中间件），直接使用
+    if (req && req.auth) {
+      return req.auth;
+    }
+    // 否则手动解析Authorization header
+    if (token && typeof token === "string") {
+      const tokenStr = token.startsWith("Bearer ")
+        ? token.split(" ")[1]
+        : token;
+      return jwt.verify(tokenStr, md5(process.env.JWT_SECRET));
+    }
+    return null;
   } catch (err) {
     return null;
   }

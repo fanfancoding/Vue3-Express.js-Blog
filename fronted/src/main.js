@@ -12,7 +12,15 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-app.use(createPinia())
+const pinia = createPinia()
+app.use(pinia)
 app.use(router)
 app.use(translateJsVueUseModel)
+
+// 应用启动后验证token
 app.mount('#app')
+
+// 应用启动时验证token
+const { useUserStore } = await import('@/stores')
+const userStore = useUserStore()
+userStore.initAuth().catch(console.error)
