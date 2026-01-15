@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -26,7 +25,6 @@ export default defineConfig({
     },
   },
   build: {
-    // 生产环境构建配置
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
@@ -42,7 +40,6 @@ export default defineConfig({
     },
   },
   server: {
-    // 开发服务器配置
     port: 5173,
     host: '0.0.0.0',
     proxy: {

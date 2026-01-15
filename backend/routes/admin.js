@@ -3,7 +3,7 @@ const router = express.Router();
 
 import { adminLoginServer, adminUpdateServer } from "../service/adminServer.js";
 import { formatResponseData, parseToken } from "../utils/tool.js";
-import { ValidationError } from "../utils/errors.js";
+import { ValidationError, ForbiddenError } from "../utils/errors.js";
 
 // 登录
 router.post("/login", async (req, res, next) => {
@@ -62,7 +62,7 @@ router.put("/", async (req, res, next) => {
   try {
     // 从JWT中间件中获取用户信息
     if (!req.auth || !req.auth.id) {
-      return res.send(formatResponseData(401, "未授权访问"));
+      throw new ForbiddenError("未授权访问");
     }
 
     // 将当前用户ID添加到请求体中，确保只能修改自己的信息

@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', () => {
   const isLoggedIn = computed(() => !!token.value && !tokenValidating.value)
 
   // 方法
-  function setToken(newToken) {
+  function setToken(newToken: string) {
     token.value = newToken
     if (newToken) {
       localStorage.setItem('token', newToken)
@@ -22,7 +22,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  function setUserInfo(info) {
+  function setUserInfo(info: any) {
     userInfo.value = info
     if (info && Object.keys(info).length > 0) {
       localStorage.setItem('userInfo', JSON.stringify(info))
@@ -39,7 +39,7 @@ export const useUserStore = defineStore('user', () => {
     localStorage.removeItem('userInfo')
   }
 
-  function login(tokenValue, userInfoValue) {
+  function login(tokenValue: string, userInfoValue: any) {
     setToken(tokenValue)
     setUserInfo(userInfoValue)
     tokenValidating.value = false

@@ -1,6 +1,5 @@
 <template>
   <div class="front-desk-container h-screen flex flex-col overflow-hidden">
-    <!-- header -->
     <div
       class="header-wrapper flex items-center justify-center flex-shrink-0"
       :style="{
@@ -83,7 +82,7 @@
       }"
     >
       <div class="flex items-center justify-center h-full px-4">
-        <span class="footer-text text-center">Copyright © 2025 Blog. All rights reserved.</span>
+        <span class="footer-text text-center">Copyright © 2026 Blog. All rights reserved.</span>
       </div>
     </div>
   </div>
@@ -93,8 +92,6 @@
 import { onMounted, ref } from 'vue'
 import { ElLink } from 'element-plus'
 import { HomeFilled, Reading, Collection } from '@element-plus/icons-vue'
-// import cat from '@/assets/cat-gun.gif'
-// import logo from '@/assets/logo.png'
 import TranslateComponent from '@/components/translate/index.vue'
 import ThemeToggleComponent from '@/components/theme-toggle/index.vue'
 import { useRouter } from 'vue-router'
