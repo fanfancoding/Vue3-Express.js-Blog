@@ -1,7 +1,7 @@
 import { useUserStore } from '@/stores'
 import axios from 'axios'
 import router from '@/router'
-
+import '@/style/index.scss'
 import { ElLoading } from 'element-plus'
 import { responseTypeMap } from '@/enum/index.js'
 import { ElMessage } from 'element-plus'
@@ -34,45 +34,6 @@ request.interceptors.request.use(
   (config) => {
     const userStore = useUserStore()
 
-    // // 定义需要token的API路径
-    // const requiresAuth = [
-    //   '/admin', // 管理员接口
-    //   '/blog', // 博客管理接口 (POST, PUT, DELETE需要token)
-    //   '/blogType', // 分类管理接口 (POST, PUT, DELETE需要token)
-    //   '/upload', // 文件上传接口
-    //   '/comment/all', // 评论管理接口
-    // ]
-
-    // 检查当前请求是否需要认证
-    // const method = config.method?.toUpperCase()
-    // const url = config.url
-
-    // 管理端接口（包含 /admin 的路径）所有方法都需要token
-    // const isAdminPath = url && url.includes('/admin')
-
-    // 留言板接口的特殊处理
-    // const isMessageBoardPath = url?.includes('/messageBoard')
-    // 公开的留言板接口（不需要token）
-    // const isMessageBoardPublic =
-    //   (url === '/messageBoard' && method === 'POST') || // 创建留言
-    //   (url === '/messageBoard/list' && method === 'GET') // 获取留言列表
-
-    // 留言板的管理操作（需要token）
-    // const isMessageBoardManagement =
-    //   isMessageBoardPath && !isMessageBoardPublic && ['PUT', 'DELETE'].includes(method) // 回复、删除等操作
-
-    // const requiresToken = isAdminPath
-    //   ? true // 管理端接口所有方法都需要token
-    //   : isMessageBoardManagement
-    //     ? true // 留言板的管理操作需要token
-    //     : requiresAuth.some((path) => url.includes(path)) &&
-    //       ['POST', 'PUT', 'DELETE'].includes(method) // 其他接口的POST/PUT/DELETE需要token
-
-    // // 只有在需要认证的接口才发送token
-    // if (requiresToken && userStore.token) {
-    //   config.headers['Authorization'] = `Bearer ${userStore.token}`
-    // }
-
     if (userStore.token) {
       config.headers['Authorization'] = `Bearer ${userStore.token}`
     }
@@ -82,8 +43,9 @@ request.interceptors.request.use(
     // 开启loading
     loadingInstance = ElLoading.service({
       lock: true,
-      text: '加载中...',
+      text: '全力加载中...',
       background: 'rgba(0, 0, 0, 0.7)',
+      customClass: 'custom-loading',
     })
 
     if (config.method === 'GET') {
@@ -93,7 +55,7 @@ request.interceptors.request.use(
     return config
   },
   (error) => {
-    resetLoading()
+    // resetLoading()
     return Promise.reject(error)
   },
 )
@@ -113,7 +75,7 @@ request.interceptors.response.use(
   },
   (error) => {
     // 关闭loading
-    resetLoading()
+    // resetLoading()
 
     // 处理错误响应
     if (error.response) {
