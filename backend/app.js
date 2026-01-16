@@ -25,8 +25,6 @@ import { testDbConnection } from "./dao/dbConnect.js";
 import { initDb } from "./dao/db.js";
 // 引入路由模块
 import adminRouter from "./routes/admin.js";
-import captchaRouter from "./routes/captcha.js";
-import bannerRouter from "./routes/banner.js";
 import uploadRouter from "./routes/upload.js";
 import blogTypeRouter from "./routes/blogType.js";
 import blogRouter from "./routes/blog.js";
@@ -113,7 +111,10 @@ const jwtMiddleware = expressjwt({
   requestProperty: "auth", // 验证通过后 将token信息挂载到req.auth上
   getToken: function (req) {
     // 优先从 Authorization header 中获取token
-    if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.split(" ")[0] === "Bearer"
+    ) {
       return req.headers.authorization.split(" ")[1];
     }
     // 如果header中没有，则从cookie中获取 Admin-Token
@@ -130,10 +131,8 @@ const jwtMiddleware = expressjwt({
   // 定义不需要token验证的路径
   const publicPaths = [
     { path: "/api/admin/login", method: "POST" },
-    { path: "/api/captcha", method: "GET" },
     { path: "/api/blog", method: "GET" },
     { path: "/api/blogType", method: "GET" },
-    { path: "/api/banner", method: "GET" },
     { path: "/api/comment", method: "POST" },
     { path: "/api/messageBoard", method: "POST" },
     { path: "/api/messageBoard/list", method: "GET" },
@@ -164,8 +163,6 @@ app.use(jwtMiddleware);
 
 // 使用路由中间件
 app.use("/api/admin", adminRouter);
-app.use("/api/captcha", captchaRouter);
-app.use("/api/banner", bannerRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/blogType", blogTypeRouter);
 app.use("/api/blog", blogRouter);

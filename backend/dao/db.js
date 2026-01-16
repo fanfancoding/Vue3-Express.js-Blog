@@ -1,7 +1,6 @@
 // 该文件负责对数据库进行初始化操作
 import { sequelize } from "./dbConnect.js";
 import { adminModel } from "./model/adminModel.js";
-import { bannerModel } from "./model/bannerModel.js";
 import { BlogTypeModel } from "./model/blogTypeModel.js";
 import { BlogModel } from "./model/blogModel.js";
 import { CommentModel } from "./model/commentModel.js";
@@ -61,19 +60,6 @@ export async function initDb() {
           loginId: "admin",
           loginPwd: md5("123456"),
         });
-    // 初始化轮播图
-    (await bannerModel.count())
-      ? () => {}
-      : await bannerModel.bulkCreate([
-          {
-            midImg:
-              "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
-            bigImg:
-              "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
-            title: "banner1",
-            descrption: "banner1描述",
-          },
-        ]);
     // 初始化博客分类
     (await BlogTypeModel.count())
       ? () => {}

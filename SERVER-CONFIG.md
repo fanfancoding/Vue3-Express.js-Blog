@@ -77,7 +77,6 @@
     ├── routes/                   # API路由
     │   ├── admin.js              # 管理员路由
     │   ├── blog.js               # 博客路由
-    │   ├── banner.js             # 轮播图路由
     │   └── comment.js            # 评论路由
     ├── dao/                      # 数据访问层
     │   ├── dbConnect.js          # 数据库连接
@@ -126,7 +125,6 @@
 - **admins**: 管理员表
 - **blogs**: 博客文章表
 - **blog_types**: 博客分类表
-- **banners**: 轮播图表
 - **comments**: 评论表
 
 ### 数据库连接配置

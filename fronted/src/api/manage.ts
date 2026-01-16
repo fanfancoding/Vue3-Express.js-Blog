@@ -9,15 +9,6 @@ export const login = (data) => {
   })
 }
 
-// 获取验证码
-export const getCaptcha = () => {
-  return request({
-    url: '/captcha',
-    method: 'GET',
-    responseType: 'blob', // 接收二进制数据
-  })
-}
-
 // 获取文章列表
 export const getArticleListRequest = (params) => {
   return request({
