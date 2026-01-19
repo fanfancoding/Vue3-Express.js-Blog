@@ -1,9 +1,6 @@
 <template>
   <!-- Title -->
-  <div
-    class="flex justify-center my-[50px] font-bold"
-    :style="{ color: 'var(--text-primary)' }"
-  >
+  <div class="flex justify-center my-[50px] font-bold" :style="{ color: 'var(--text-primary)' }">
     <h1>{{ currentCategoryName || '全部文章' }}</h1>
   </div>
 
@@ -48,7 +45,7 @@
           class="sidebar-filter shadow-md p-6 rounded-xl overflow-hidden sticky top-4"
           :style="{
             backgroundColor: 'var(--bg-secondary)',
-            color: 'var(--text-secondary)'
+            color: 'var(--text-secondary)',
           }"
         >
           <el-input
@@ -354,6 +351,8 @@ function handleSearch() {
   cursor: pointer;
   transition: all 0.3s;
   border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
   min-width: 60px;
   min-height: 32px;
 
@@ -368,20 +367,13 @@ function handleSearch() {
   }
 
   &:hover {
-    background-color: var(--bg-primary);
-    border-color: var(--accent-color);
+    background-color: var(--accent-color);
+    color: #fff;
   }
 
   &.active {
     background-color: var(--accent-color);
-    color: white;
-    border-color: var(--accent-color);
-
-    .category-count {
-      --el-tag-bg-color: rgba(255, 255, 255, 0.2);
-      --el-tag-text-color: white;
-      --el-tag-border-color: rgba(255, 255, 255, 0.3);
-    }
+    color: #fff;
   }
 
   .category-name {

@@ -62,7 +62,6 @@ const goDetail = (id) => {
 const fetchData = async () => {
   loading.value = true
   try {
-    // 拉取足够大的页数，确保覆盖全部
     const res = await getBlogListRequest({ page: 1, limit: 1000 })
     const data = handleResponse(res, false)
     list.value = (data?.rows || data?.list || []).sort(
