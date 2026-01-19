@@ -58,7 +58,7 @@
           />
         </el-form-item>
 
-        <el-form-item label="缩略图" prop="thumb">
+        <!-- <el-form-item label="缩略图" prop="thumb">
           <div class="upload-container">
             <el-upload
               class="avatar-uploader"
@@ -77,7 +77,7 @@
               <p>支持 jpg、png 格式，大小不超过 2MB</p>
             </div>
           </div>
-        </el-form-item>
+        </el-form-item> -->
       </el-card>
 
       <el-card class="form-card content-card">
@@ -252,14 +252,13 @@ const handleUploadImg = async (files, callback) => {
       const formData = new FormData()
       formData.append('file', file)
 
-      const res = await uploadImageRequest(formData)
-      if (res.code === 200 && res.data) {
-        // 临时方案：通过API代理访问静态资源（已在后端JWT白名单中添加）
-        const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001/api'
-        const imageUrl = `${baseUrl}/${res.data}`
-        return imageUrl
-      }
-      return ''
+      const res = handleResponse(await uploadImageRequest(formData))
+      console.log(res, 'res')
+      // 临时方案：通过API代理访问静态资源（已在后端JWT白名单中添加）
+      const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001/api'
+      const imageUrl = `${baseUrl}/${res}`
+      console.log(imageUrl, 'imageUrl')
+      return imageUrl
     })
 
     const urls = await Promise.all(uploadPromises)

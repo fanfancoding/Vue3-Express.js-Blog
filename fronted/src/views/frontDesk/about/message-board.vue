@@ -443,6 +443,13 @@ onMounted(() => {
   border-color: var(--border-color);
 }
 
+.message-board-page :deep(.el-input__wrapper.is-focus),
+.message-board-page :deep(.el-input__wrapper.is-focused),
+.message-board-page :deep(.el-textarea__inner:focus) {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 1px var(--accent-color) inset !important;
+}
+
 .message-board-page :deep(.el-card) {
   background-color: var(--bg-secondary);
   color: var(--text-secondary);

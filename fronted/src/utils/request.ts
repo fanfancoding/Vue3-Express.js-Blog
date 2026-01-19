@@ -38,7 +38,10 @@ request.interceptors.request.use(
       config.headers['Authorization'] = `Bearer ${userStore.token}`
     }
 
-    config.headers['Content-Type'] = responseTypeMap.get(config.responseType || 'json')
+    // 对于文件上传请求，不强制设置 Content-Type，让浏览器自动处理
+    if (!(config.data instanceof FormData)) {
+      config.headers['Content-Type'] = responseTypeMap.get(config.responseType || 'json')
+    }
 
     // 开启loading
     loadingInstance = ElLoading.service({

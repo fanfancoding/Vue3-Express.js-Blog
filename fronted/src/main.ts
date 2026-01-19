@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import 'virtual:uno.css'
 import 'element-plus/dist/index.css'
+import 'highlight.js/styles/github.css' // highlight.js 代码高亮样式
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import {translateJsVueUseModel} from './utils/translate' // 多语言切换, 导入translate插件
 import App from './App.vue'

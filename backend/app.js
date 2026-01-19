@@ -139,7 +139,7 @@ const jwtMiddleware = expressjwt({
   ];
 
   // 检查静态资源路径
-  if (req.path.startsWith("/static/") && req.method === "GET") {
+  if (req.path.startsWith("/api/static/") && req.method === "GET") {
     return true;
   }
 

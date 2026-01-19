@@ -12,10 +12,15 @@ router.post("/", async (req, res, next) => {
       return next(new FileUploadError("请检查文件的大小,限制2MB"));
     } else if (err) {
       return next(err);
-    } else {
-      const path = "static/uploads/" + req.file.filename;
-      res.send(formatResponseData(200, "上传成功", path));
     }
+
+    // 检查是否有文件上传
+    if (!req.file) {
+      return next(new FileUploadError("请选择要上传的文件"));
+    }
+
+    const path = "static/uploads/" + req.file.filename;
+    res.send(formatResponseData(200, "上传成功", path));
   });
 });
 export default router;

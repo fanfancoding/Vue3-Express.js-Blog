@@ -16,12 +16,23 @@ import {
 } from "../dao/blogDao.js";
 import { deleteCommentsByBlogIdDao } from "../dao/commentDao.js";
 import MarkdownIt from "markdown-it";
+import hljs from "highlight.js";
 
 // 初始化 Markdown-it
 const md = new MarkdownIt({
   html: true, // 允许 HTML 标签
   linkify: true, // 自动将 URL 转为链接
   typographer: true, // 优化排版
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value;
+      } catch (err) {
+        console.error('代码高亮错误:', err);
+      }
+    }
+    return ''; // 使用默认转义
+  }
 });
 
 validate.validators.categoryIdIsExist = async function (value) {

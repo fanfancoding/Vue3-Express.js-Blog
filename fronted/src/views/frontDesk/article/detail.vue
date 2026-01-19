@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-1200px mx-auto p-20px lt-lg:max-w-100% lt-lg:p-15px lt-md:p-10px lt-sm:p-8px">
+  <div class="max-w-1800px mx-auto p-20px lt-lg:max-w-100% lt-lg:p-15px lt-md:p-10px lt-sm:p-8px">
     <div v-if="loading" class="p-40px lt-md:p-30px lt-sm:p-20px">
       <el-skeleton :rows="10" animated />
     </div>
@@ -51,7 +51,7 @@
       </div>
 
       <!-- 文章内容 -->
-      <div class="article-body" v-html="article.htmlContent"></div>
+      <div class="article-body" v-html="renderedContent"></div>
 
       <!-- 评论区域 -->
       <div
@@ -96,15 +96,62 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getBlogDetailRequest, addCommentRequest, getCommentsByBlogIdRequest } from '@/api/blog'
 import { handleResponse } from '@/utils/common'
 import dayjs from 'dayjs'
+import hljs from 'highlight.js'
+import 'highlightjs-vue'
+import MarkdownIt from 'markdown-it'
 
 defineOptions({
   name: 'ArticleDetailPage',
+})
+
+// 配置markdown-it
+const md = new MarkdownIt({
+  highlight: function (str, lang) {
+    if (lang) {
+      // 处理不同语言
+      let language = lang.toLowerCase()
+
+      // 特殊处理 Vue 代码
+      if (language === 'vue') {
+        // 使用 highlightjs-vue 插件进行高亮
+        try {
+          const highlighted = hljs.highlight(str, { language: 'vue' }).value
+          return `<div class="code-block-container"><button class="copy-btn" onclick="copyToClipboard(this)">复制</button><pre class="hljs"><code class="hljs language-vue">${highlighted}</code></pre></div>`
+        } catch (e) {
+          console.warn('Vue highlighting failed:', e)
+          // 降级到 HTML 高亮
+          try {
+            const highlighted = hljs.highlight(str, { language: 'html' }).value
+            return `<div class="code-block-container"><button class="copy-btn" onclick="copyToClipboard(this)">复制</button><pre class="hljs"><code class="hljs language-vue">${highlighted}</code></pre></div>`
+          } catch (e2) {
+            console.warn('Fallback HTML highlighting also failed:', e2)
+          }
+        }
+      }
+
+      // 检查是否支持该语言
+      if (hljs.getLanguage(language)) {
+        try {
+          const highlighted = hljs.highlight(str, { language }).value
+          return `<div class="code-block-container"><button class="copy-btn" onclick="copyToClipboard(this)">复制</button><pre class="hljs"><code class="hljs language-${language}">${highlighted}</code></pre></div>`
+        } catch (e) {
+          console.warn(`${language} highlighting failed:`, e)
+        }
+      }
+
+      // 对于不支持的语言，使用纯文本
+      console.warn(`Language '${lang}' not supported, falling back to plain text`)
+    }
+
+    // 默认处理
+    return `<div class="code-block-container"><button class="copy-btn" onclick="copyToClipboard(this)">复制</button><pre class="hljs"><code class="hljs">${md.utils.escapeHtml(str)}</code></pre></div>`
+  }
 })
 
 const route = useRoute()
@@ -118,6 +165,12 @@ const comments = ref([
   { emoji: '😢', count: 0, clicked: false },
   { emoji: '😡', count: 0, clicked: false },
 ])
+
+// 渲染后的文章内容
+const renderedContent = computed(() => {
+  if (!article.value?.markdownContent) return ''
+  return md.render(article.value.markdownContent)
+})
 
 // 获取文章详情
 async function getArticleDetail() {
@@ -194,17 +247,115 @@ async function handleEmojiClick(emoji) {
   }
 }
 
-// 格式化日期（以详情页为准，确保正确处理字符串时间戳）
 function formatDate(timestamp) {
   // 如果 timestamp 是字符串，转换为数字
   const ts = typeof timestamp === 'string' ? Number(timestamp) : timestamp
   return dayjs(ts).format('YYYY-MM-DD HH:mm:ss')
 }
 
+// 复制代码到剪贴板
+function copyToClipboard(button) {
+  const codeBlock = button.nextElementSibling
+  const code = codeBlock.textContent || codeBlock.innerText
+
+  if (navigator.clipboard && window.isSecureContext) {
+    // 使用现代 Clipboard API
+    navigator.clipboard.writeText(code).then(() => {
+      ElMessage.success('复制成功')
+    }).catch(() => {
+      ElMessage.error('复制失败')
+      fallbackCopyTextToClipboard(code, button)
+    })
+  } else {
+    // 降级到 execCommand
+    fallbackCopyTextToClipboard(code, button)
+  }
+}
+
+// 降级复制方法
+function fallbackCopyTextToClipboard(text, button) {
+  const textArea = document.createElement('textarea')
+  textArea.value = text
+  textArea.style.position = 'fixed'
+  textArea.style.left = '-999999px'
+  textArea.style.top = '-999999px'
+  document.body.appendChild(textArea)
+  textArea.focus()
+  textArea.select()
+
+  try {
+    const successful = document.execCommand('copy')
+    if (successful) {
+      ElMessage.success('复制成功')
+    } else {
+      ElMessage.error('复制失败')
+    }
+  } catch (err) {
+    ElMessage.error('复制失败')
+  }
+
+  document.body.removeChild(textArea)
+}
+
+// 显示复制反馈
+function showCopyFeedback(button, message, isError = false) {
+  const originalText = button.textContent
+  button.textContent = message
+  button.style.backgroundColor = isError ? '#f56c6c' : '#67c23a'
+  button.style.color = '#ffffff'
+
+  setTimeout(() => {
+    button.textContent = originalText
+    button.style.backgroundColor = ''
+    button.style.color = ''
+  }, 2000)
+}
+
+// 将复制函数添加到全局作用域
+if (typeof window !== 'undefined') {
+  window.copyToClipboard = copyToClipboard
+}
+
 onMounted(() => {
   getArticleDetail()
 })
 </script>
+
+<style>
+/* highlight.js 全局样式 - One Dark Pro 主题 */
+.hljs {
+  background: #282c34;
+  color: #abb2bf;
+}
+
+.hljs-keyword {
+  color: #e06c75;
+}
+
+.hljs-string {
+  color: #98c379;
+}
+
+.hljs-function {
+  color: #61afef;
+}
+
+.hljs-variable {
+  color: #d19a66;
+}
+
+.hljs-comment {
+  color: #5c6370;
+}
+
+.hljs-number {
+  color: #d19a66;
+}
+
+.hljs-operator {
+  color: #56b6c2;
+}
+</style>
 
 <style scoped>
 .article-body {
@@ -292,7 +443,7 @@ onMounted(() => {
 
 .article-body :deep(code) {
   padding: 2px 4px;
-  background: var(--bg-primary);
+  background: #282c34;
   border-radius: 3px;
   font-family: 'Courier New', monospace;
 
@@ -308,10 +459,10 @@ onMounted(() => {
 
 .article-body :deep(pre) {
   padding: 16px;
-  background: var(--bg-primary);
+  background: #282c34;
   border-radius: 4px;
   overflow-x: auto;
-  margin-bottom: 16px;
+  margin-bottom: 0;
 
   @media (max-width: 768px) {
     padding: 12px;
@@ -321,7 +472,6 @@ onMounted(() => {
   @media (max-width: 480px) {
     padding: 10px;
     font-size: 12px;
-    margin-bottom: 12px;
   }
 }
 
@@ -337,6 +487,60 @@ onMounted(() => {
 
   @media (max-width: 480px) {
     margin: 10px 0;
+  }
+}
+
+/* 代码块容器样式 */
+.article-body :deep(.code-block-container) {
+  position: relative;
+  margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 10px;
+  }
+}
+
+/* 复制按钮样式 */
+.article-body :deep(.copy-btn) {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #abb2bf;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    top: 6px;
+    right: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  @media (max-width: 480px) {
+    top: 4px;
+    right: 4px;
+    padding: 3px 6px;
+    font-size: 10px;
   }
 }
 </style>

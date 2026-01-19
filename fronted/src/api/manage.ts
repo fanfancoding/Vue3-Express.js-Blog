@@ -102,9 +102,6 @@ export const uploadImageRequest = (formData) => {
     url: '/upload',
     method: 'POST',
     data: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
   })
 }
 
